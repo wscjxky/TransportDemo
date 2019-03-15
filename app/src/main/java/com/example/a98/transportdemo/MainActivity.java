@@ -1,5 +1,6 @@
 package com.example.a98.transportdemo;
 
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.*;
@@ -35,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
                         "2",
                         Toast.LENGTH_LONG);
                 tot.show();
+                Intent intent=new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivity(intent);
             }
         });
 

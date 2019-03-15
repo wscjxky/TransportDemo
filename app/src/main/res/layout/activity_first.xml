@@ -11,29 +11,50 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
 
-        android:orientation="horizontal"
         android:gravity="left|center_horizontal"
-        android:paddingTop="0dp"
+        android:orientation="horizontal"
         android:paddingBottom="0dp"
-        android:paddingLeft="10dp">
+        android:paddingLeft="10dp"
+        android:paddingTop="0dp">
 
         <TextView
             android:layout_width="70dp"
             android:layout_height="50dp"
             android:text="名称："
-            android:textSize="20sp"
-            />
+            android:textSize="20sp" />
+
         <EditText
             android:id="@+id/blackOutNumber"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:paddingLeft="2dp"
-            android:hint="请输入名称"
-            android:textSize="20sp"
-            android:inputType="number"
             android:background="@null"
-            />
+            android:hint="请输入名称"
+            android:inputType="number"
+            android:paddingLeft="2dp"
+            android:textSize="20sp" />
     </LinearLayout>
+
+    <Button
+        android:id="@+id/take_photo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="take photo"
+        app:layout_constraintBottom_toTopOf="@+id/picture"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/picture"
+        android:layout_width="350dp"
+        android:layout_height="316dp"
+        android:scaleType="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/blackOutLayoutNumber" />
 
 
 </android.support.constraint.ConstraintLayout>
