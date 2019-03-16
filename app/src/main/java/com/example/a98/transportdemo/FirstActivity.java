@@ -20,9 +20,12 @@ public class FirstActivity extends AppCompatActivity{
 }*/
 
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
@@ -30,24 +33,147 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
+
+import com.iflytek.cloud.RecognizerResult;
+import com.iflytek.cloud.SpeechConstant;
+import com.iflytek.cloud.SpeechError;
+import com.iflytek.cloud.SpeechRecognizer;
+import com.iflytek.cloud.SpeechUtility;
+import com.iflytek.cloud.ui.RecognizerDialog;
+import com.iflytek.cloud.ui.RecognizerDialogListener;
 
 public class FirstActivity extends AppCompatActivity {
     public static final int TAKE_PHOTO=1;//声明一个请求码，用于识别返回的结果
     private ImageView picture;
     private Button takephoto;
+    private Button speak;
+    private EditText addr;
     private Uri imageUri;
+    //存放听写分析结果文本
+    private HashMap<String, String> hashMapTexts = new LinkedHashMap<String, String>();
+    SpeechRecognizer hearer;  //听写对象
+    RecognizerDialog dialog;  //讯飞提示框
+    private boolean flag;
+    private boolean exist;
+    private TextView bridge;
+
+    private int w,h;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_first);
+
         takephoto=(Button)findViewById(R.id.take_photo);
         picture=findViewById(R.id.picture);
+        ViewGroup.LayoutParams para;
+        para = picture.getLayoutParams();
+//        para.height = 500;
+//        para.width = 500;
+//        picture.setLayoutParams(para);
+        w = para.width;
+        h = para.height;
+
+        addr = (EditText) findViewById(R.id.TextAddr);
+        bridge = (TextView) findViewById(R.id.bridge);
+        speak = findViewById(R.id.speak);
+
+        speak.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                flag = true;
+                // 语音配置对象初始化
+                SpeechUtility.createUtility(FirstActivity.this, SpeechConstant.APPID + "=5b4f2581");
+
+                // 1.创建SpeechRecognizer对象，第2个参数：本地听写时传InitListener
+                hearer = SpeechRecognizer.createRecognizer(FirstActivity.this, null);
+                // 交互动画
+                dialog = new RecognizerDialog(FirstActivity.this, null);
+                // 2.设置听写参数，详见《科大讯飞MSC API手册(Android)》SpeechConstant类
+                hearer.setParameter(SpeechConstant.DOMAIN, "iat"); // domain:域名
+                hearer.setParameter(SpeechConstant.LANGUAGE, "zh_cn");
+                hearer.setParameter(SpeechConstant.ACCENT, "mandarin"); // mandarin:普通话
+
+                //3.开始听写
+                dialog.setListener(new RecognizerDialogListener() {  //设置对话框
+
+                    @Override
+                    public void onResult(RecognizerResult results, boolean isLast) {
+                        Log.d("Result", results.getResultString());
+                        //(1) 解析 json 数据<< 一个一个分析文本 >>
+                        StringBuffer strBuffer = new StringBuffer();
+                        try {
+                            JSONTokener tokener = new JSONTokener(results.getResultString());
+                            Log.i("TAG", "Test" + results.getResultString());
+                            Log.i("TAG", "Test" + results.toString());
+                            JSONObject joResult = new JSONObject(tokener);
+
+                            JSONArray words = joResult.getJSONArray("ws");
+                            for (int i = 0; i < words.length(); i++) {
+                                // 转写结果词，默认使用第一个结果
+                                JSONArray items = words.getJSONObject(i).getJSONArray("cw");
+                                JSONObject obj = items.getJSONObject(0);
+                                strBuffer.append(obj.getString("w"));
+
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+//            		String text = strBuffer.toString();
+                        // (2)读取json结果中的sn字段
+                        String sn = null;
+
+                        try {
+                            JSONObject resultJson = new JSONObject(results.getResultString());
+                            sn = resultJson.optString("sn");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        //(3) 解析语音文本<< 将文本叠加成语音分析结果  >>
+                        hashMapTexts.put(sn, strBuffer.toString());
+                        StringBuffer resultBuffer = new StringBuffer();  //最后结果
+                        for (String key : hashMapTexts.keySet()) {
+                            resultBuffer.append(hashMapTexts.get(key));
+                        }
+                        if (flag == true) {
+                            bridge.setText(resultBuffer.toString());
+                            addr.append(bridge.getText().toString());
+                            addr.requestFocus();//获取焦点
+                            addr.setSelection(addr.getText().length());//将光标定位到文字最后，以便修改
+                            flag = false;
+                        }
+                    }
+
+                    @Override
+                    public void onError(SpeechError error) {
+                        error.getPlainDescription(true);
+                    }
+                });
+
+                dialog.show();  //显示对话框
+            }
+
+        });
+
         takephoto.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 File outputImage=new File(getExternalCacheDir(),"output_image.jpg");
@@ -97,6 +223,7 @@ public class FirstActivity extends AppCompatActivity {
             }
         });
     }
+
     //处理返回结果的函数，下面是隐示Intent的返回结果的处理方式，具体见以前我所发的intent讲解
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         switch (requestCode)
@@ -107,7 +234,14 @@ public class FirstActivity extends AppCompatActivity {
                     try
                     {
                         Bitmap bitmap= BitmapFactory.decodeStream(getContentResolver().openInputStream(imageUri));
-                        picture.setImageBitmap(bitmap);
+                        int width = bitmap.getWidth();
+                        int height = bitmap.getHeight();
+                        //调整图片角度
+                        Matrix matrix = new Matrix();
+                        matrix.setRotate(90);
+                        Bitmap b2 = bitmap;
+                        b2 = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
+                        picture.setImageBitmap(b2);
                         //将图片解析成Bitmap对象，并把它显现出来
                     }
                     catch (FileNotFoundException e)

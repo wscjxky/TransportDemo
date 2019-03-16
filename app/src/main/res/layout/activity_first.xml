@@ -6,16 +6,32 @@
     android:layout_height="match_parent">
 
 
+    <Button
+        android:id="@+id/speak"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="speak"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/take_photo"
+        app:layout_constraintTop_toBottomOf="@+id/Layout2" />
+
     <LinearLayout
-        android:id="@+id/blackOutLayoutNumber"
+        android:id="@+id/Layout1"
         android:layout_width="match_parent"
         android:layout_height="50dp"
 
+        android:layout_marginTop="8dp"
         android:gravity="left|center_horizontal"
         android:orientation="horizontal"
         android:paddingBottom="0dp"
         android:paddingLeft="10dp"
-        android:paddingTop="0dp">
+        android:paddingTop="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:layout_width="70dp"
@@ -24,12 +40,43 @@
             android:textSize="20sp" />
 
         <EditText
-            android:id="@+id/blackOutNumber"
+            android:id="@+id/TextName"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="@null"
             android:hint="请输入名称"
-            android:inputType="number"
+            android:paddingLeft="2dp"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/Layout2"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+
+        android:layout_marginTop="8dp"
+        android:gravity="left|center_horizontal"
+        android:orientation="horizontal"
+        android:paddingBottom="0dp"
+        android:paddingLeft="10dp"
+        android:paddingTop="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Layout1">
+
+        <TextView
+            android:layout_width="70dp"
+            android:layout_height="50dp"
+            android:text="地点："
+            android:textSize="20sp" />
+
+        <EditText
+            android:id="@+id/TextAddr"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@null"
+            android:hint="请输入地点"
             android:paddingLeft="2dp"
             android:textSize="20sp" />
     </LinearLayout>
@@ -38,23 +85,35 @@
         android:id="@+id/take_photo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
         android:text="take photo"
-        app:layout_constraintBottom_toTopOf="@+id/picture"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/speak"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Layout2" />
 
     <ImageView
         android:id="@+id/picture"
-        android:layout_width="350dp"
-        android:layout_height="316dp"
-        android:scaleType="center"
+        android:layout_width="100dp"
+        android:layout_height="200dp"
+        android:scaleType="centerInside"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/blackOutLayoutNumber" />
+        app:layout_constraintTop_toBottomOf="@+id/speak" />
+
+    <TextView
+        android:id="@+id/bridge"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#ffff"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/picture"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/take_photo"
+        android:visibility="gone"/>
 
 
 </android.support.constraint.ConstraintLayout>
