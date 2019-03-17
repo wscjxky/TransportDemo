@@ -19,7 +19,7 @@ public class FirstActivity extends AppCompatActivity{
 
 }*/
 
-
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -96,8 +96,10 @@ public class FirstActivity extends AppCompatActivity {
         bridge = (TextView) findViewById(R.id.bridge);
         speak = findViewById(R.id.speak);
 
+
+
         speak.setOnClickListener(new View.OnClickListener() {
-            @Override
+
             public void onClick(View view) {
                 flag = true;
                 // 语音配置对象初始化
@@ -254,5 +256,7 @@ public class FirstActivity extends AppCompatActivity {
                 break;
         }
     }
+
+
 }
 

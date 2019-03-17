@@ -17,11 +17,6 @@ public class MainActivity extends AppCompatActivity {
         button1.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                Toast tot = Toast.makeText(
-                        MainActivity.this,
-                        "1",
-                        Toast.LENGTH_LONG);
-                tot.show();
                 Intent intent =new Intent(MainActivity.this,FirstActivity.class);
                 startActivity(intent);
             }
@@ -31,12 +26,7 @@ public class MainActivity extends AppCompatActivity {
         button2.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                Toast tot = Toast.makeText(
-                        MainActivity.this,
-                        "2",
-                        Toast.LENGTH_LONG);
-                tot.show();
-                Intent intent=new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                Intent intent =new Intent(MainActivity.this,SecondActivity.class);
                 startActivity(intent);
             }
         });
