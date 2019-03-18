@@ -1,23 +1,4 @@
 package com.example.a98.transportdemo;
-/*
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.content.Intent;
-import android.view.*;
-import android.widget.*;
-import android.graphics.Bitmap;
-
-public class FirstActivity extends AppCompatActivity{
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_first);
-
-
-    }
-
-}*/
 
 import android.app.Dialog;
 import android.content.Context;
@@ -66,8 +47,10 @@ public class FirstActivity extends AppCompatActivity {
     private ImageView picture;
     private Button takephoto;
     private Button speak;
+    private EditText name;
     private EditText addr;
     private Uri imageUri;
+
     //存放听写分析结果文本
     private HashMap<String, String> hashMapTexts = new LinkedHashMap<String, String>();
     SpeechRecognizer hearer;  //听写对象
@@ -75,6 +58,7 @@ public class FirstActivity extends AppCompatActivity {
     private boolean flag;
     private boolean exist;
     private TextView bridge;
+    private EditText bridge2;
 
     private int w,h;
 
@@ -92,12 +76,33 @@ public class FirstActivity extends AppCompatActivity {
         w = para.width;
         h = para.height;
 
+        name = (EditText) findViewById(R.id.TextName);
         addr = (EditText) findViewById(R.id.TextAddr);
         bridge = (TextView) findViewById(R.id.bridge);
+
+        name.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    // 得到焦点，便于语音输入确定位置
+                    bridge2.setText("");
+                    bridge2 = name;
+                }
+            }
+        });
+
+        addr.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    // 得到焦点，便于语音输入确定位置
+                    bridge2.setText("");
+                    bridge2 = addr;
+                }
+            }
+        });
+
         speak = findViewById(R.id.speak);
-
-
-
         speak.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
@@ -139,7 +144,7 @@ public class FirstActivity extends AppCompatActivity {
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
-//            		String text = strBuffer.toString();
+                        //String text = strBuffer.toString();
                         // (2)读取json结果中的sn字段
                         String sn = null;
 
@@ -158,9 +163,9 @@ public class FirstActivity extends AppCompatActivity {
                         }
                         if (flag == true) {
                             bridge.setText(resultBuffer.toString());
-                            addr.append(bridge.getText().toString());
-                            addr.requestFocus();//获取焦点
-                            addr.setSelection(addr.getText().length());//将光标定位到文字最后，以便修改
+                            bridge2.append(bridge.getText().toString());
+                            bridge2.requestFocus();//获取焦点
+                            bridge2.setSelection(bridge2.getText().length());//将光标定位到文字最后，以便修改
                             flag = false;
                         }
                     }

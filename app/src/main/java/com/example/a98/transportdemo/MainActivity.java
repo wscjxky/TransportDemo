@@ -35,11 +35,8 @@ public class MainActivity extends AppCompatActivity {
         button3.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                Toast tot = Toast.makeText(
-                        MainActivity.this,
-                        "3",
-                        Toast.LENGTH_LONG);
-                tot.show();
+                Intent intent =new Intent(MainActivity.this,ThirdActivity.class);
+                startActivity(intent);
             }
         });
     }
