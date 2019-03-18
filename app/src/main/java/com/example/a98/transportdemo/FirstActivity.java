@@ -79,12 +79,14 @@ public class FirstActivity extends AppCompatActivity {
         name = (EditText) findViewById(R.id.TextName);
         addr = (EditText) findViewById(R.id.TextAddr);
         bridge = (TextView) findViewById(R.id.bridge);
+        bridge2 = (EditText) findViewById(R.id.bridge2);
 
         name.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
                     // 得到焦点，便于语音输入确定位置
+                    bridge2 = (EditText) findViewById(R.id.bridge2);
                     bridge2.setText("");
                     bridge2 = name;
                 }
@@ -96,6 +98,7 @@ public class FirstActivity extends AppCompatActivity {
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
                     // 得到焦点，便于语音输入确定位置
+                    bridge2 = (EditText) findViewById(R.id.bridge2);
                     bridge2.setText("");
                     bridge2 = addr;
                 }
