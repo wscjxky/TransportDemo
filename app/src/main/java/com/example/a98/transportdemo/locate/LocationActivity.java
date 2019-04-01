@@ -1,19 +1,14 @@
-package com.example.a98.transportdemo;
+package com.example.a98.transportdemo.locate;
 
 
-import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.location.GpsSatellite;
-import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -21,18 +16,13 @@ import android.widget.ToggleButton;
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
-
 import com.amap.api.maps.AMap;
-import com.amap.api.maps.AMapUtils;
-import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.LocationSource;
 import com.amap.api.maps.MapView;
-import com.amap.api.maps.model.BitmapDescriptorFactory;
-import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Marker;
-import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.Polyline;
 import com.amap.api.maps.model.PolylineOptions;
+import com.amap.api.trace.TraceListener;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -45,39 +35,38 @@ import android.view.View.OnClickListener;
 
 import com.amap.api.location.AMapLocationClientOption.AMapLocationMode;
 import com.amap.api.location.AMapLocationListener;
+import com.amap.api.maps.AMapUtils;
+import com.amap.api.maps.CameraUpdateFactory;
 
-import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
+import com.amap.api.maps.model.BitmapDescriptorFactory;
+import com.amap.api.maps.model.LatLng;
+import com.amap.api.maps.model.MarkerOptions;
 
-import com.amap.api.trace.TraceLocation;
 import com.amap.api.trace.LBSTraceClient;
 import com.amap.api.trace.TraceListener;
 import com.amap.api.trace.TraceLocation;
 import com.amap.api.trace.TraceOverlay;
 
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import com.amap.api.location.AMapLocationListener;
-
+import com.amap.api.trace.TraceLocation;
+import com.amap.api.trace.TraceOverlay;
+import com.example.a98.transportdemo.R;
 import com.example.a98.transportdemo.data.DbAdapter;
 import com.example.a98.transportdemo.data.PathRecord;
-import com.example.a98.transportdemo.locate.RecordActivity;
 import com.example.a98.transportdemo.util.Util;
 
-import org.xutils.view.annotation.ContentView;
-import org.xutils.view.annotation.Event;
-import org.xutils.view.annotation.ViewInject;
-import org.xutils.x;
-
-@ContentView(R.layout.activity_third)
-public class ThirdActivity extends BaseActivity implements LocationSource, AMapLocationListener
-        , TraceListener {
+public class LocationActivity extends AppCompatActivity implements LocationSource, AMapLocationListener, TraceListener {
     private final static int CALLTRACE = 0;
+    private MapView mMapView;
     private AMap mAMap;
     private OnLocationChangedListener mListener;
     private AMapLocationClient mLocationClient;
@@ -89,37 +78,28 @@ public class ThirdActivity extends BaseActivity implements LocationSource, AMapL
     private long mEndTime;
     private ToggleButton btn;
     private DbAdapter DbHepler;
+    private List<TraceLocation> mTracelocationlist = new ArrayList<TraceLocation>();
+    private List<TraceOverlay> mOverlayList = new ArrayList<TraceOverlay>();
     private List<AMapLocation> recordList = new ArrayList<AMapLocation>();
     private int tracesize = 30;
     private int mDistance = 0;
+    private TraceOverlay mTraceoverlay;
     private TextView mResultShow;
     private Marker mlocMarker;
-    @ViewInject(R.id.tv_level)
-    private TextView tv_level;
-    @ViewInject(R.id.map)
-    private MapView mMapView;
-    private LocationManager manager;
-    private List<TraceLocation> mTracelocationlist = new ArrayList<TraceLocation>();
-    private List<TraceOverlay> mOverlayList = new ArrayList<TraceOverlay>();
-
-    private TraceOverlay mTraceoverlay;
-
-    @Event(R.id.title_tv_option)
-    private void record(View v) {
-        Intent intent = new Intent(ThirdActivity.this, RecordActivity.class);
-        startActivity(intent);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_third);
-        x.view().inject(this);
+        mMapView = (MapView) findViewById(R.id.map);
         mMapView.onCreate(savedInstanceState);// 此方法必须重写
         init();
         initpolyline();
     }
 
+    /**
+     * 初始化AMap对象
+     */
     private void init() {
         if (mAMap == null) {
             mAMap = mMapView.getMap();
@@ -130,7 +110,7 @@ public class ThirdActivity extends BaseActivity implements LocationSource, AMapL
             @Override
             public void onClick(View v) {
                 if (btn.isChecked()) {
-                    mAMap.clear(true);
+                    mAMap.clear();
                     if (record != null) {
                         record = null;
                     }
@@ -145,8 +125,7 @@ public class ThirdActivity extends BaseActivity implements LocationSource, AMapL
                     mResultShow.setText(
                             decimalFormat.format(getTotalDistance() / 1000d) + "KM");
                     LBSTraceClient mTraceClient = new LBSTraceClient(getApplicationContext());
-                    mTraceClient.queryProcessedTrace(2, Util.parseTraceLocationList(record.getPathline()),
-                            LBSTraceClient.TYPE_AMAP, ThirdActivity.this);
+                    mTraceClient.queryProcessedTrace(2, Util.parseTraceLocationList(record.getPathline()), LBSTraceClient.TYPE_AMAP, LocationActivity.this);
                     saveRecord(record.getPathline(), record.getDate());
                 }
             }
@@ -172,7 +151,7 @@ public class ThirdActivity extends BaseActivity implements LocationSource, AMapL
                     pathlineSring, stratpoint, endpoint, time);
             DbHepler.close();
         } else {
-            Toast.makeText(ThirdActivity.this, "没有记录到路径", Toast.LENGTH_SHORT)
+            Toast.makeText(this, "没有记录到路径", Toast.LENGTH_SHORT)
                     .show();
         }
     }
@@ -249,8 +228,6 @@ public class ThirdActivity extends BaseActivity implements LocationSource, AMapL
         mAMap.setMyLocationEnabled(true);// 设置为true表示显示定位层并可触发定位，false表示隐藏定位层并不可触发定位，默认是false
         // 设置定位的类型为定位模式 ，可以由定位、跟随或地图根据面向方向旋转几种
         mAMap.setMyLocationType(AMap.LOCATION_TYPE_LOCATE);
-        mAMap.moveCamera(CameraUpdateFactory.zoomTo(15));
-
     }
 
     /**
@@ -323,10 +300,7 @@ public class ThirdActivity extends BaseActivity implements LocationSource, AMapL
                     record.addpoint(amapLocation);
                     mPolyoptions.add(mylocation);
                     mTracelocationlist.add(Util.parseTraceLocation(amapLocation));
-                    log(mylocation.toString());
-                    mResultShow.setText(mylocation.toString());
                     redrawline();
-
                     if (mTracelocationlist.size() > tracesize - 1) {
                         trace();
                     }
@@ -355,7 +329,10 @@ public class ThirdActivity extends BaseActivity implements LocationSource, AMapL
 
             // 设置定位参数
             mLocationClient.setLocationOption(mLocationOption);
-
+            // 此方法为每隔固定时间会发起一次定位请求，为了减少电量消耗或网络流量消耗，
+            // 注意设置合适的定位时间的间隔（最小间隔支持为2000ms），并且在合适时间调用stopLocation()方法来取消定位请求
+            // 在定位结束后，在合适的生命周期调用onDestroy()方法
+            // 在单次定位情况下，定位无论成功与否，都无需调用stopLocation()方法移除请求，定位sdk内部会移除
             mLocationClient.startLocation();
 
         }
@@ -391,6 +368,10 @@ public class ThirdActivity extends BaseActivity implements LocationSource, AMapL
         return date;
     }
 
+    public void record(View view) {
+//        Intent intent = new Intent(MainActivity.this, RecordActivity.class);
+//        startActivity(intent);
+    }
 
     private void trace() {
         List<TraceLocation> locationList = new ArrayList<>(mTracelocationlist);
@@ -401,16 +382,10 @@ public class ThirdActivity extends BaseActivity implements LocationSource, AMapL
         mTracelocationlist.add(lastlocation);
     }
 
-    /**
-     * 轨迹纠偏失败回调。
-     *
-     * @param i
-     * @param s
-     */
+
     @Override
     public void onRequestFailed(int i, String s) {
-        mOverlayList.add(mTraceoverlay);
-        mTraceoverlay = new TraceOverlay(mAMap);
+
     }
 
     @Override
@@ -418,42 +393,11 @@ public class ThirdActivity extends BaseActivity implements LocationSource, AMapL
 
     }
 
-    /**
-     * 轨迹纠偏成功回调。
-     *
-     * @param lineID      纠偏的线路ID
-     * @param linepoints  纠偏结果
-     * @param distance    总距离
-     * @param waitingtime 等待时间
-     */
     @Override
-    public void onFinished(int lineID, List<LatLng> linepoints, int distance, int waitingtime) {
-        if (lineID == 1) {
-            if (linepoints != null && linepoints.size() > 0) {
-                mTraceoverlay.add(linepoints);
-                mDistance += distance;
-                mTraceoverlay.setDistance(mTraceoverlay.getDistance() + distance);
-                if (mlocMarker == null) {
-                    mlocMarker = mAMap.addMarker(new MarkerOptions().position(linepoints.get(linepoints.size() - 1))
-                            .icon(BitmapDescriptorFactory
-                                    .fromResource(R.drawable.point))
-                            .title("距离：" + mDistance + "米"));
-                    mlocMarker.showInfoWindow();
-                } else {
-                    mlocMarker.setTitle("距离：" + mDistance + "米");
-                    mlocMarker.setPosition(linepoints.get(linepoints.size() - 1));
-                    mlocMarker.showInfoWindow();
-                }
-            }
-        } else if (lineID == 2) {
-            if (linepoints != null && linepoints.size() > 0) {
-                mAMap.addPolyline(new PolylineOptions()
-                        .color(Color.RED)
-                        .width(40).addAll(linepoints));
-            }
-        }
+    public void onFinished(int i, List<LatLng> list, int i1, int i2) {
 
     }
+
 
     /**
      * 最后获取总距离
@@ -467,35 +411,4 @@ public class ThirdActivity extends BaseActivity implements LocationSource, AMapL
         }
         return distance;
     }
-
-
-    private GpsStatus.Listener gpsStatusListener = new GpsStatus.Listener() {
-        @SuppressLint("SetTextI18n")
-        @Override
-        public void onGpsStatusChanged(int event) {
-            switch (event) {
-                case GpsStatus.GPS_EVENT_SATELLITE_STATUS:
-                    if (ActivityCompat.checkSelfPermission(ThirdActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    }
-                    GpsStatus gpsStatus = manager.getGpsStatus(null);
-                    int maxSatellites = gpsStatus.getMaxSatellites();
-                    Iterator<GpsSatellite> iters = gpsStatus.getSatellites().iterator();
-                    int count = 0;
-                    StringBuilder sb = new StringBuilder();
-                    while (iters.hasNext() && count <= maxSatellites) {
-                        count++;
-                        GpsSatellite s = iters.next();
-                        float snr = s.getSnr();
-                        sb.append("第").append(count).append("颗").append("：").append(snr).append("\n");
-                    }
-                    tv_level.setText("当前卫星颗数：" + count);
-                    Log.e("TAG", sb.toString());
-                    break;
-                default:
-                    break;
-            }
-        }
-    };
-
-
 }

@@ -33,7 +33,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
+import org.xutils.view.annotation.Event;
+import org.xutils.view.annotation.ViewInject;
+import org.xutils.x;
 
+import com.example.a98.transportdemo.util.Share;
 import com.iflytek.cloud.RecognizerResult;
 import com.iflytek.cloud.SpeechConstant;
 import com.iflytek.cloud.SpeechError;
@@ -42,15 +46,33 @@ import com.iflytek.cloud.SpeechUtility;
 import com.iflytek.cloud.ui.RecognizerDialog;
 import com.iflytek.cloud.ui.RecognizerDialogListener;
 
-public class FirstActivity extends AppCompatActivity {
-    public static final int TAKE_PHOTO=1;//声明一个请求码，用于识别返回的结果
-    private ImageView picture;
-    private Button takephoto;
-    private Button speak;
-    private EditText name;
-    private EditText addr;
-    private Uri imageUri;
 
+public class FirstActivity extends BaseActivity implements View.OnFocusChangeListener {
+    public static final int TAKE_PHOTO = 1;//声明一个请求码，用于识别返回的结果
+    private ImageView photo_view;
+    private ImageView speak;
+    @ViewInject(R.id.Text1)
+    private EditText text1;
+    @ViewInject(R.id.Text2)
+    private EditText text2;
+    @ViewInject(R.id.Text3)
+    private EditText text3;
+    @ViewInject(R.id.Text4)
+    private EditText text4;
+    @ViewInject(R.id.Text5)
+    private EditText text5;
+    @ViewInject(R.id.speak1)
+    private ImageView speak1;
+    @ViewInject(R.id.speak2)
+    private ImageView speak2;
+    @ViewInject(R.id.speak3)
+    private ImageView speak3;
+    @ViewInject(R.id.speak4)
+    private ImageView speak4;
+    @ViewInject(R.id.speak5)
+    private ImageView speak5;
+
+    private Uri imageUri;
     //存放听写分析结果文本
     private HashMap<String, String> hashMapTexts = new LinkedHashMap<String, String>();
     SpeechRecognizer hearer;  //听写对象
@@ -60,54 +82,41 @@ public class FirstActivity extends AppCompatActivity {
     private TextView bridge;
     private EditText bridge2;
 
-    private int w,h;
+    @Event(value = {R.id.take_photo_xibei})
+    private void takephoto(View view) {
+
+    }
+
+    @Event(value = {R.id.button_submit})
+    private void submit(View view) {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_SUBJECT, "分享");
+        intent.putExtra(Intent.EXTRA_TEXT, "交通" +
+                "数据表.xls");
+        //extraText为文本的内容
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(Intent.createChooser(intent, "分享"));
+
+    }
+
+    protected void setFocus(View v, Boolean hasFocus) {
+        if (hasFocus) {
+            // 得到焦点，便于语音输入确定位置
+            bridge2 = (EditText) findViewById(R.id.bridge2);
+            bridge2.setText("");
+            bridge2 = (EditText) v;
+        }
+    }
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_first);
-
-        takephoto=(Button)findViewById(R.id.take_photo);
-        picture=findViewById(R.id.picture);
-        ViewGroup.LayoutParams para;
-        para = picture.getLayoutParams();
-//        para.height = 500;
-//        para.width = 500;
-//        picture.setLayoutParams(para);
-        w = para.width;
-        h = para.height;
-
-        name = (EditText) findViewById(R.id.TextName);
-        addr = (EditText) findViewById(R.id.TextAddr);
-        bridge = (TextView) findViewById(R.id.bridge);
-        bridge2 = (EditText) findViewById(R.id.bridge2);
-
-        name.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    // 得到焦点，便于语音输入确定位置
-                    bridge2 = (EditText) findViewById(R.id.bridge2);
-                    bridge2.setText("");
-                    bridge2 = name;
-                }
-            }
-        });
-
-        addr.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    // 得到焦点，便于语音输入确定位置
-                    bridge2 = (EditText) findViewById(R.id.bridge2);
-                    bridge2.setText("");
-                    bridge2 = addr;
-                }
-            }
-        });
-
-        speak = findViewById(R.id.speak);
-        speak.setOnClickListener(new View.OnClickListener() {
-
+        x.view().inject(this); //绑定注解
+        photo_view = (ImageView) findViewById(R.id.take_photo);
+        bridge = findViewById(R.id.bridge);
+        bridge2 = findViewById(R.id.bridge2);
+        speak1.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 flag = true;
                 // 语音配置对象初始化
@@ -184,66 +193,56 @@ public class FirstActivity extends AppCompatActivity {
 
         });
 
-        takephoto.setOnClickListener(new View.OnClickListener() {
+        photo_view.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                File outputImage=new File(getExternalCacheDir(),"output_image.jpg");
-                /*
-                创建一个File文件对象，用于存放摄像头拍下的图片，我们把这个图片命名为output_image.jpg
-                并把它存放在应用关联缓存目录下，调用getExternalCacheDir()可以得到这个目录，为什么要
-                用关联缓存目录呢？由于android6.0开始，读写sd卡列为了危险权限，使用的时候必须要有权限，
-                应用关联目录则可以跳过这一步
-                 */
+                File outputImage = new File(getExternalCacheDir(), "output_image.jpg");
                 try//判断图片是否存在，存在则删除在创建，不存在则直接创建
                 {
-                    if(outputImage.exists())
-                    {
+                    if (outputImage.exists()) {
                         outputImage.delete();
                     }
                     outputImage.createNewFile();
-                }
-                catch (IOException e)
-                {
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
-                if(Build.VERSION.SDK_INT>=24)
+                if (Build.VERSION.SDK_INT >= 24)
                     //判断安卓的版本是否高于7.0，高于则调用高于的方法，低于则调用低于的方法
                     //把文件转换成Uri对象
                     /*
                     之所以这样，是因为android7.0以后直接使用本地真实路径是不安全的，会抛出异常。
                     FileProvider是一种特殊的内容提供器，可以对数据进行保护
-                     */
-                {
-                    imageUri= FileProvider.getUriForFile(FirstActivity.this,
-                            "com.example.cameraalbumtest.fileprovider",outputImage);
+                     */ {
+                    imageUri = FileProvider.getUriForFile(FirstActivity.this,
+                            "com.example.cameraalbumtest.fileprovider", outputImage);
                     /*
                     第一个参数：context对象
                     第二个参数：任意唯一的字符串
                     第三个参数：文件对象
                      */
 
-                }
-                else {
-                    imageUri=Uri.fromFile(outputImage);
+                } else {
+                    imageUri = Uri.fromFile(outputImage);
                 }
                 //使用隐示的Intent，系统会找到与它对应的活动，即调用摄像头，并把它存储
-                Intent intent=new Intent("android.media.action.IMAGE_CAPTURE");
-                intent.putExtra(MediaStore.EXTRA_OUTPUT,imageUri);
-                startActivityForResult(intent,TAKE_PHOTO);
+                Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+                startActivityForResult(intent, TAKE_PHOTO);
                 //调用会返回结果的开启方式，返回成功的话，则把它显示出来
             }
         });
     }
 
+    //    @Event(value = {R.id.button_submit})
+//    private void submit(View view){
+//        Toast.makeText(this,"bt1测试",Toast.LENGTH_LONG).show();
+//    }
     //处理返回结果的函数，下面是隐示Intent的返回结果的处理方式，具体见以前我所发的intent讲解
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        switch (requestCode)
-        {
+        switch (requestCode) {
             case TAKE_PHOTO:
-                if(resultCode==RESULT_OK)
-                {
-                    try
-                    {
-                        Bitmap bitmap= BitmapFactory.decodeStream(getContentResolver().openInputStream(imageUri));
+                if (resultCode == RESULT_OK) {
+                    try {
+                        Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(imageUri));
                         int width = bitmap.getWidth();
                         int height = bitmap.getHeight();
                         //调整图片角度
@@ -251,11 +250,9 @@ public class FirstActivity extends AppCompatActivity {
                         matrix.setRotate(90);
                         Bitmap b2 = bitmap;
                         b2 = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
-                        picture.setImageBitmap(b2);
+                        photo_view.setImageBitmap(b2);
                         //将图片解析成Bitmap对象，并把它显现出来
-                    }
-                    catch (FileNotFoundException e)
-                    {
+                    } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
                 }
@@ -266,5 +263,28 @@ public class FirstActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+        switch (v.getId()) {
+            case R.id.Text1:
+                setFocus(text1, hasFocus);
+                break;
+            case R.id.Text2:
+                setFocus(text2, hasFocus);
+                break;
+            case R.id.Text3:
+                setFocus(text3, hasFocus);
+
+                break;
+            case R.id.Text4:
+                setFocus(text4, hasFocus);
+                break;
+            case R.id.Text5:
+                setFocus(text5, hasFocus);
+                break;
+            default:
+                break;
+        }
+    }
 }
 

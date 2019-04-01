@@ -3,19 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/oldlace"
+  >
 
-
-    <Button
-        android:id="@+id/speak"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="语音"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/take_photo"
-        app:layout_constraintTop_toBottomOf="@+id/Layout2" />
 
     <LinearLayout
         android:id="@+id/Layout1"
@@ -25,9 +16,9 @@
         android:layout_marginTop="8dp"
         android:gravity="left|center_horizontal"
         android:orientation="horizontal"
-        android:paddingBottom="0dp"
         android:paddingLeft="10dp"
         android:paddingTop="0dp"
+        android:paddingBottom="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -40,13 +31,14 @@
             android:textSize="20sp" />
 
         <EditText
-            android:id="@+id/TextName"
+            android:id="@+id/Text1"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="@null"
             android:hint="请输入名称"
             android:paddingLeft="2dp"
             android:textSize="20sp" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -57,9 +49,9 @@
         android:layout_marginTop="8dp"
         android:gravity="left|center_horizontal"
         android:orientation="horizontal"
-        android:paddingBottom="0dp"
         android:paddingLeft="10dp"
         android:paddingTop="0dp"
+        android:paddingBottom="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -68,64 +60,273 @@
         <TextView
             android:layout_width="70dp"
             android:layout_height="50dp"
-            android:text="地点："
+            android:text="道路名"
             android:textSize="20sp" />
 
         <EditText
-            android:id="@+id/TextAddr"
-            android:layout_width="match_parent"
+            android:id="@+id/Text2"
+            android:layout_width="270dp"
             android:layout_height="50dp"
             android:background="@null"
-            android:hint="请输入地点"
+            android:hint="请输入"
             android:paddingLeft="2dp"
             android:textSize="20sp" />
+
+        <ImageView
+            android:id="@+id/speak1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/fab_bg_mini"
+            android:text="语音" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/Layout2"
+        android:layout_width="406dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="332dp"
+        android:gravity="left|center_horizontal"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:paddingTop="0dp"
+        android:paddingBottom="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Layout1">
+
+        <TextView
+            android:layout_width="88dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="10dp"
+            android:text="西北角："
+            android:textSize="20sp" />
+
+        <ImageView
+            android:id="@+id/take_photo_xibei"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginBottom="284dp"
+            android:clickable="true"
+            android:focusable="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.108"
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@android:drawable/ic_menu_add" />
+
+        <TextView
+            android:layout_width="88dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="50dp"
+            android:text="东南角："
+            android:textSize="20sp" />
+
+        <ImageView
+            android:id="@+id/take_photo"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginBottom="284dp"
+            android:clickable="true"
+            android:focusable="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.108"
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@android:drawable/ic_menu_add" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/Layout2"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+
+        android:layout_marginTop="128dp"
+        android:gravity="left|center_horizontal"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:paddingTop="0dp"
+        android:paddingBottom="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Layout1">
+
+        <TextView
+            android:layout_width="120dp"
+            android:layout_height="50dp"
+            android:text="污染物名称："
+            android:textSize="19sp" />
+
+        <EditText
+            android:id="@+id/Text4"
+            android:layout_width="220dp"
+            android:layout_height="50dp"
+            android:background="@null"
+            android:hint="请输入"
+            android:paddingLeft="2dp"
+            android:textSize="20sp" />
+
+        <ImageView
+            android:id="@+id/speak3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/fab_bg_mini"
+            android:text="语音" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/Layout2"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+
+        android:layout_marginTop="68dp"
+        android:gravity="left|center_horizontal"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:paddingTop="0dp"
+        android:paddingBottom="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Layout1">
+
+        <TextView
+            android:layout_width="70dp"
+            android:layout_height="50dp"
+            android:text="桩号："
+            android:textSize="20sp" />
+
+        <EditText
+            android:id="@+id/Text3"
+            android:layout_width="270dp"
+            android:layout_height="50dp"
+            android:background="@null"
+            android:hint="请输入"
+            android:paddingLeft="2dp"
+            android:textSize="20sp" />
+
+        <ImageView
+            android:id="@+id/speak2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/fab_bg_mini"
+            android:text="语音" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/Layout2"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+
+        android:layout_marginTop="196dp"
+        android:gravity="left|center_horizontal"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:paddingTop="0dp"
+        android:paddingBottom="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Layout1">
+
+        <TextView
+            android:layout_width="120dp"
+            android:layout_height="50dp"
+            android:text="污染物类型："
+            android:textSize="19sp" />
+
+        <EditText
+            android:id="@+id/Text5"
+            android:layout_width="220dp"
+            android:layout_height="50dp"
+            android:background="@null"
+            android:hint="请输入"
+            android:paddingLeft="2dp"
+            android:textSize="20sp" />
+
+        <ImageView
+            android:id="@+id/speak4"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/fab_bg_mini"
+            android:text="语音" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/Layout2"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+
+        android:layout_marginTop="260dp"
+        android:gravity="left|center_horizontal"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:paddingTop="0dp"
+        android:paddingBottom="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Layout1">
+
+        <TextView
+            android:layout_width="120dp"
+            android:layout_height="50dp"
+            android:text="污染物面积："
+            android:textSize="19sp" />
+
+        <EditText
+            android:id="@+id/Text6"
+            android:layout_width="220dp"
+            android:layout_height="50dp"
+            android:background="@null"
+            android:hint="请输入"
+            android:paddingLeft="2dp"
+            android:textSize="20sp" />
+
+        <ImageView
+            android:id="@+id/speak5"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/fab_bg_mini"
+            android:text="语音" />
     </LinearLayout>
 
     <Button
-        android:id="@+id/take_photo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="拍照"
-        app:layout_constraintEnd_toStartOf="@+id/speak"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Layout2" />
 
-    <ImageView
-        android:id="@+id/picture"
-        android:layout_width="180dp"
-        android:layout_height="228dp"
-        android:scaleType="centerInside"
+        android:id="@+id/button_submit"
+        android:layout_width="270dp"
+        android:layout_height="44dp"
+        android:layout_marginBottom="48dp"
+        android:background="@drawable/btn_bg_red"
+        android:text="提交"
+        android:textColor="@color/white"
+        android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/speak" />
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent" />
+
 
     <TextView
         android:id="@+id/bridge"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="#ffff"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/picture"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/take_photo"
-        android:visibility="gone"/>
+        app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
         android:id="@+id/bridge2"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="#ffff"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/picture"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/take_photo"
-        android:visibility="gone"/>
-
+        app:layout_constraintStart_toStartOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
