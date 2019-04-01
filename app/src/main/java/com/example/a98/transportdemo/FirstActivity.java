@@ -33,6 +33,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
+import org.w3c.dom.Text;
 import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
@@ -47,10 +48,13 @@ import com.iflytek.cloud.ui.RecognizerDialog;
 import com.iflytek.cloud.ui.RecognizerDialogListener;
 
 
-public class FirstActivity extends BaseActivity implements View.OnFocusChangeListener {
-    public static final int TAKE_PHOTO = 1;//声明一个请求码，用于识别返回的结果
+public class FirstActivity extends BaseActivity implements View.OnClickListener {
+    public static final int TAKE_PHOTO = 1;
+    public static final int TAKE_PHOTO_XI = 2;
+    @ViewInject(R.id.take_photo_xibei)
+    private ImageView photo_view_xibei;
+    @ViewInject(R.id.take_photo)
     private ImageView photo_view;
-    private ImageView speak;
     @ViewInject(R.id.Text1)
     private EditText text1;
     @ViewInject(R.id.Text2)
@@ -61,6 +65,10 @@ public class FirstActivity extends BaseActivity implements View.OnFocusChangeLis
     private EditText text4;
     @ViewInject(R.id.Text5)
     private EditText text5;
+    @ViewInject(R.id.Text6)
+    private EditText text6;
+    @ViewInject(R.id.speak)
+    private ImageView speak;
     @ViewInject(R.id.speak1)
     private ImageView speak1;
     @ViewInject(R.id.speak2)
@@ -82,9 +90,44 @@ public class FirstActivity extends BaseActivity implements View.OnFocusChangeLis
     private TextView bridge;
     private EditText bridge2;
 
-    @Event(value = {R.id.take_photo_xibei})
-    private void takephoto(View view) {
+    @Event(value = {R.id.speak})
+    private void setSpeak(View view) {
+        setRecoder(text1, speak);
+    }
 
+    @Event(value = {R.id.speak1})
+    private void setSpeak1(View view) {
+        setRecoder(text2, speak1);
+    }
+
+    @Event(value = {R.id.speak2})
+    private void setSpeak2(View view) {
+        setRecoder(text3, speak2);
+    }
+
+    @Event(value = {R.id.speak3})
+    private void setSpeak3(View view) {
+        setRecoder(text4, speak3);
+    }
+
+    @Event(value = {R.id.speak4})
+    private void setSpeak4(View view) {
+        setRecoder(text5, speak4);
+    }
+
+    @Event(value = {R.id.speak5})
+    private void setSpeak5(View view) {
+        setRecoder(text6, speak5);
+    }
+
+    @Event(value = {R.id.take_photo_xibei})
+    private void takephoto1(View view) {
+        takephoto(TAKE_PHOTO_XI);
+    }
+
+    @Event(value = {R.id.take_photo})
+    private void takephoto2(View view) {
+        takephoto(TAKE_PHOTO);
     }
 
     @Event(value = {R.id.button_submit})
@@ -100,14 +143,29 @@ public class FirstActivity extends BaseActivity implements View.OnFocusChangeLis
 
     }
 
-    protected void setFocus(View v, Boolean hasFocus) {
-        if (hasFocus) {
-            // 得到焦点，便于语音输入确定位置
-            bridge2 = (EditText) findViewById(R.id.bridge2);
-            bridge2.setText("");
-            bridge2 = (EditText) v;
+    private void takephoto(int type) {
+        File outputImage = new File(getExternalCacheDir(), "output_image.jpg");
+        try//判断图片是否存在，存在则删除在创建，不存在则直接创建
+        {
+            if (outputImage.exists()) {
+                outputImage.delete();
+            }
+            outputImage.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+        if (Build.VERSION.SDK_INT >= 24) {
+            imageUri = FileProvider.getUriForFile(FirstActivity.this,
+                    "com.example.cameraalbumtest.fileprovider", outputImage);
+
+        } else {
+            imageUri = Uri.fromFile(outputImage);
+        }
+        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+        startActivityForResult(intent, type);
     }
+
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -116,120 +174,10 @@ public class FirstActivity extends BaseActivity implements View.OnFocusChangeLis
         photo_view = (ImageView) findViewById(R.id.take_photo);
         bridge = findViewById(R.id.bridge);
         bridge2 = findViewById(R.id.bridge2);
-        speak1.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                flag = true;
-                // 语音配置对象初始化
-                SpeechUtility.createUtility(FirstActivity.this, SpeechConstant.APPID + "=5b4f2581");
 
-                // 1.创建SpeechRecognizer对象，第2个参数：本地听写时传InitListener
-                hearer = SpeechRecognizer.createRecognizer(FirstActivity.this, null);
-                // 交互动画
-                dialog = new RecognizerDialog(FirstActivity.this, null);
-                // 2.设置听写参数，详见《科大讯飞MSC API手册(Android)》SpeechConstant类
-                hearer.setParameter(SpeechConstant.DOMAIN, "iat"); // domain:域名
-                hearer.setParameter(SpeechConstant.LANGUAGE, "zh_cn");
-                hearer.setParameter(SpeechConstant.ACCENT, "mandarin"); // mandarin:普通话
+        bridge = (TextView) findViewById(R.id.bridge);
+        bridge2 = (EditText) findViewById(R.id.bridge2);
 
-                //3.开始听写
-                dialog.setListener(new RecognizerDialogListener() {  //设置对话框
-
-                    @Override
-                    public void onResult(RecognizerResult results, boolean isLast) {
-                        Log.d("Result", results.getResultString());
-                        //(1) 解析 json 数据<< 一个一个分析文本 >>
-                        StringBuffer strBuffer = new StringBuffer();
-                        try {
-                            JSONTokener tokener = new JSONTokener(results.getResultString());
-                            Log.i("TAG", "Test" + results.getResultString());
-                            Log.i("TAG", "Test" + results.toString());
-                            JSONObject joResult = new JSONObject(tokener);
-
-                            JSONArray words = joResult.getJSONArray("ws");
-                            for (int i = 0; i < words.length(); i++) {
-                                // 转写结果词，默认使用第一个结果
-                                JSONArray items = words.getJSONObject(i).getJSONArray("cw");
-                                JSONObject obj = items.getJSONObject(0);
-                                strBuffer.append(obj.getString("w"));
-
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        //String text = strBuffer.toString();
-                        // (2)读取json结果中的sn字段
-                        String sn = null;
-
-                        try {
-                            JSONObject resultJson = new JSONObject(results.getResultString());
-                            sn = resultJson.optString("sn");
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                        //(3) 解析语音文本<< 将文本叠加成语音分析结果  >>
-                        hashMapTexts.put(sn, strBuffer.toString());
-                        StringBuffer resultBuffer = new StringBuffer();  //最后结果
-                        for (String key : hashMapTexts.keySet()) {
-                            resultBuffer.append(hashMapTexts.get(key));
-                        }
-                        if (flag == true) {
-                            bridge.setText(resultBuffer.toString());
-                            bridge2.append(bridge.getText().toString());
-                            bridge2.requestFocus();//获取焦点
-                            bridge2.setSelection(bridge2.getText().length());//将光标定位到文字最后，以便修改
-                            flag = false;
-                        }
-                    }
-
-                    @Override
-                    public void onError(SpeechError error) {
-                        error.getPlainDescription(true);
-                    }
-                });
-
-                dialog.show();  //显示对话框
-            }
-
-        });
-
-        photo_view.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                File outputImage = new File(getExternalCacheDir(), "output_image.jpg");
-                try//判断图片是否存在，存在则删除在创建，不存在则直接创建
-                {
-                    if (outputImage.exists()) {
-                        outputImage.delete();
-                    }
-                    outputImage.createNewFile();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                if (Build.VERSION.SDK_INT >= 24)
-                    //判断安卓的版本是否高于7.0，高于则调用高于的方法，低于则调用低于的方法
-                    //把文件转换成Uri对象
-                    /*
-                    之所以这样，是因为android7.0以后直接使用本地真实路径是不安全的，会抛出异常。
-                    FileProvider是一种特殊的内容提供器，可以对数据进行保护
-                     */ {
-                    imageUri = FileProvider.getUriForFile(FirstActivity.this,
-                            "com.example.cameraalbumtest.fileprovider", outputImage);
-                    /*
-                    第一个参数：context对象
-                    第二个参数：任意唯一的字符串
-                    第三个参数：文件对象
-                     */
-
-                } else {
-                    imageUri = Uri.fromFile(outputImage);
-                }
-                //使用隐示的Intent，系统会找到与它对应的活动，即调用摄像头，并把它存储
-                Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-                startActivityForResult(intent, TAKE_PHOTO);
-                //调用会返回结果的开启方式，返回成功的话，则把它显示出来
-            }
-        });
     }
 
     //    @Event(value = {R.id.button_submit})
@@ -257,34 +205,133 @@ public class FirstActivity extends BaseActivity implements View.OnFocusChangeLis
                     }
                 }
                 break;
+            case TAKE_PHOTO_XI:
+                try {
+                    Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(imageUri));
+                    int width = bitmap.getWidth();
+                    int height = bitmap.getHeight();
+                    //调整图片角度
+                    Matrix matrix = new Matrix();
+                    matrix.setRotate(90);
+                    Bitmap b2 = bitmap;
+                    b2 = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
+                    photo_view_xibei.setImageBitmap(b2);
+                    //将图片解析成Bitmap对象，并把它显现出来
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+
             default:
                 break;
         }
     }
 
+
+    private void setRecoder(final EditText edit, final ImageView iv) {
+        flag = true;
+        log("sdf");
+        // 语音配置对象初始化
+        SpeechUtility.createUtility(FirstActivity.this, SpeechConstant.APPID + "=5b4f2581");
+
+        // 1.创建SpeechRecognizer对象，第2个参数：本地听写时传InitListener
+        hearer = SpeechRecognizer.createRecognizer(FirstActivity.this, null);
+        // 交互动画
+        dialog = new RecognizerDialog(FirstActivity.this, null);
+        // 2.设置听写参数，详见《科大讯飞MSC API手册(Android)》SpeechConstant类
+        hearer.setParameter(SpeechConstant.DOMAIN, "iat"); // domain:域名
+        hearer.setParameter(SpeechConstant.LANGUAGE, "zh_cn");
+        hearer.setParameter(SpeechConstant.ACCENT, "mandarin"); // mandarin:普通话
+
+        //3.开始听写
+        dialog.setListener(new RecognizerDialogListener() {  //设置对话框
+
+            @Override
+            public void onResult(RecognizerResult results, boolean isLast) {
+                Log.d("Result", results.getResultString());
+                //(1) 解析 json 数据<< 一个一个分析文本 >>
+                StringBuilder strBuffer = new StringBuilder();
+                try {
+                    JSONTokener tokener = new JSONTokener(results.getResultString());
+                    Log.i("TAG", "Test" + results.getResultString());
+                    Log.i("TAG", "Test" + results.toString());
+                    JSONObject joResult = new JSONObject(tokener);
+
+                    JSONArray words = joResult.getJSONArray("ws");
+                    for (int i = 0; i < words.length(); i++) {
+                        // 转写结果词，默认使用第一个结果
+                        JSONArray items = words.getJSONObject(i).getJSONArray("cw");
+                        JSONObject obj = items.getJSONObject(0);
+                        strBuffer.append(obj.getString("w"));
+
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                //String text = strBuffer.toString();
+                // (2)读取json结果中的sn字段
+                String sn = null;
+
+                try {
+                    JSONObject resultJson = new JSONObject(results.getResultString());
+                    sn = resultJson.optString("sn");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                //(3) 解析语音文本<< 将文本叠加成语音分析结果  >>
+                hashMapTexts.put(sn, strBuffer.toString());
+                StringBuilder resultBuffer = new StringBuilder();  //最后结果
+                for (String key : hashMapTexts.keySet()) {
+                    resultBuffer.append(hashMapTexts.get(key));
+                }
+                if (flag) {
+                    bridge.setText(resultBuffer.toString());
+                    edit.append(bridge.getText().toString());
+                    edit.requestFocus();//获取焦点
+                    edit.setSelection(edit.getText().length());//将光标定位到文字最后，以便修改
+                    flag = false;
+                }
+            }
+
+            @Override
+            public void onError(SpeechError error) {
+                error.getPlainDescription(true);
+            }
+        });
+
+        dialog.show();  //显示对话框
+
+    }
 
     @Override
-    public void onFocusChange(View v, boolean hasFocus) {
+    public void onClick(View v) {
+        log("asd");
         switch (v.getId()) {
-            case R.id.Text1:
-                setFocus(text1, hasFocus);
+            case R.id.speak:
+                setRecoder(text1, speak);
                 break;
-            case R.id.Text2:
-                setFocus(text2, hasFocus);
+            case R.id.speak1:
+                setRecoder(text2, speak1);
                 break;
-            case R.id.Text3:
-                setFocus(text3, hasFocus);
+            case R.id.speak2:
+                setRecoder(text3, speak2);
 
                 break;
-            case R.id.Text4:
-                setFocus(text4, hasFocus);
+            case R.id.speak3:
+                setRecoder(text4, speak3);
                 break;
-            case R.id.Text5:
-                setFocus(text5, hasFocus);
+            case R.id.speak4:
+                setRecoder(text5, speak4);
+                break;
+            case R.id.speak5:
+                setRecoder(text6, speak5);
                 break;
             default:
                 break;
         }
     }
+
+
 }
+
 

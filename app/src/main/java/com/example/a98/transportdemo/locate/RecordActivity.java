@@ -67,6 +67,8 @@ public class RecordActivity extends Activity implements OnItemClickListener, Ada
 		PathRecord recorditem = (PathRecord) parent.getAdapter().getItem(
 				position);
 		mDataBaseHelper.delete(recorditem.getId());
+		mAllRecord.remove(position);
+		mAdapter.notifyDataSetChanged();
 		return true;
 	}
 }

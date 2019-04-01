@@ -1,4 +1,4 @@
-package com.example.a98.transportdemo;
+package com.example.a98.transportdemo.data;
 
 import android.app.AlertDialog;
 import android.app.Dialog;

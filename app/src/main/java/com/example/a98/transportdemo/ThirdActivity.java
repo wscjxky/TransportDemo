@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.location.GpsSatellite;
 import android.location.GpsStatus;
 import android.location.Location;
+
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -75,7 +76,7 @@ import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
 @ContentView(R.layout.activity_third)
-public class ThirdActivity extends BaseActivity implements LocationSource, AMapLocationListener
+public class ThirdActivity extends Activity implements LocationSource, AMapLocationListener
         , TraceListener {
     private final static int CALLTRACE = 0;
     private AMap mAMap;
@@ -101,6 +102,34 @@ public class ThirdActivity extends BaseActivity implements LocationSource, AMapL
     private LocationManager manager;
     private List<TraceLocation> mTracelocationlist = new ArrayList<TraceLocation>();
     private List<TraceOverlay> mOverlayList = new ArrayList<TraceOverlay>();
+
+    private GpsStatus.Listener gpsStatusListener = new GpsStatus.Listener() {
+        @SuppressLint("SetTextI18n")
+        @Override
+        public void onGpsStatusChanged(int event) {
+            switch (event) {
+                case GpsStatus.GPS_EVENT_SATELLITE_STATUS:
+                    if (ActivityCompat.checkSelfPermission(ThirdActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    }
+                    GpsStatus gpsStatus = manager.getGpsStatus(null);
+                    int maxSatellites = gpsStatus.getMaxSatellites();
+                    Iterator<GpsSatellite> iters = gpsStatus.getSatellites().iterator();
+                    int count = 0;
+                    StringBuilder sb = new StringBuilder();
+                    while (iters.hasNext() && count <= maxSatellites) {
+                        count++;
+                        GpsSatellite s = iters.next();
+                        float snr = s.getSnr();
+                        sb.append("第").append(count).append("颗").append("：").append(snr).append("\n");
+                    }
+                    tv_level.setText("当前卫星颗数：" + count);
+                    Log.e("TAG", sb.toString());
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
 
     private TraceOverlay mTraceoverlay;
 
@@ -154,6 +183,13 @@ public class ThirdActivity extends BaseActivity implements LocationSource, AMapL
         mResultShow = (TextView) findViewById(R.id.show_all_dis);
 
         mTraceoverlay = new TraceOverlay(mAMap);
+        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        assert locationManager != null;
+        locationManager.addGpsStatusListener(gpsStatusListener);
+
     }
 
     protected void saveRecord(List<AMapLocation> list, String time) {
@@ -249,7 +285,7 @@ public class ThirdActivity extends BaseActivity implements LocationSource, AMapL
         mAMap.setMyLocationEnabled(true);// 设置为true表示显示定位层并可触发定位，false表示隐藏定位层并不可触发定位，默认是false
         // 设置定位的类型为定位模式 ，可以由定位、跟随或地图根据面向方向旋转几种
         mAMap.setMyLocationType(AMap.LOCATION_TYPE_LOCATE);
-        mAMap.moveCamera(CameraUpdateFactory.zoomTo(15));
+        mAMap.moveCamera(CameraUpdateFactory.zoomTo(18));
 
     }
 
@@ -323,7 +359,6 @@ public class ThirdActivity extends BaseActivity implements LocationSource, AMapL
                     record.addpoint(amapLocation);
                     mPolyoptions.add(mylocation);
                     mTracelocationlist.add(Util.parseTraceLocation(amapLocation));
-                    log(mylocation.toString());
                     mResultShow.setText(mylocation.toString());
                     redrawline();
 
@@ -372,14 +407,6 @@ public class ThirdActivity extends BaseActivity implements LocationSource, AMapL
                 mpolyline = mAMap.addPolyline(mPolyoptions);
             }
         }
-//		if (mpolyline != null) {
-//			mpolyline.remove();
-//		}
-//		mPolyoptions.visible(true);
-//		mpolyline = mAMap.addPolyline(mPolyoptions);
-//			PolylineOptions newpoly = new PolylineOptions();
-//			mpolyline = mAMap.addPolyline(newpoly.addAll(mPolyoptions.getPoints()));
-//		}
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -398,7 +425,7 @@ public class ThirdActivity extends BaseActivity implements LocationSource, AMapL
         mTraceClient.queryProcessedTrace(1, locationList, LBSTraceClient.TYPE_AMAP, this);
         TraceLocation lastlocation = mTracelocationlist.get(mTracelocationlist.size() - 1);
         mTracelocationlist.clear();
-        mTracelocationlist.add(lastlocation);
+//        mTracelocationlist.add(lastlocation);
     }
 
     /**
@@ -410,7 +437,7 @@ public class ThirdActivity extends BaseActivity implements LocationSource, AMapL
     @Override
     public void onRequestFailed(int i, String s) {
         mOverlayList.add(mTraceoverlay);
-        mTraceoverlay = new TraceOverlay(mAMap);
+//        mTraceoverlay = new TraceOverlay(mAMap);
     }
 
     @Override
@@ -467,35 +494,6 @@ public class ThirdActivity extends BaseActivity implements LocationSource, AMapL
         }
         return distance;
     }
-
-
-    private GpsStatus.Listener gpsStatusListener = new GpsStatus.Listener() {
-        @SuppressLint("SetTextI18n")
-        @Override
-        public void onGpsStatusChanged(int event) {
-            switch (event) {
-                case GpsStatus.GPS_EVENT_SATELLITE_STATUS:
-                    if (ActivityCompat.checkSelfPermission(ThirdActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    }
-                    GpsStatus gpsStatus = manager.getGpsStatus(null);
-                    int maxSatellites = gpsStatus.getMaxSatellites();
-                    Iterator<GpsSatellite> iters = gpsStatus.getSatellites().iterator();
-                    int count = 0;
-                    StringBuilder sb = new StringBuilder();
-                    while (iters.hasNext() && count <= maxSatellites) {
-                        count++;
-                        GpsSatellite s = iters.next();
-                        float snr = s.getSnr();
-                        sb.append("第").append(count).append("颗").append("：").append(snr).append("\n");
-                    }
-                    tv_level.setText("当前卫星颗数：" + count);
-                    Log.e("TAG", sb.toString());
-                    break;
-                default:
-                    break;
-            }
-        }
-    };
 
 
 }

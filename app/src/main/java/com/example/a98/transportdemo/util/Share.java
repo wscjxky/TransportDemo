@@ -16,25 +16,27 @@ import com.vondear.rxtool.RxImageTool;
 
 import static android.provider.UserDictionary.Words.APP_ID;
 
-public  class Share extends BroadcastReceiver {
-    public static final String ACTION_SHARE_RESPONSE="action_wx_share_response";
-    private  Context context;
-    private  IWXAPI api;
+public class Share extends BroadcastReceiver {
+    public static final String ACTION_SHARE_RESPONSE = "action_wx_share_response";
+    private Context context;
+    private IWXAPI api;
+
     @Override
     public void onReceive(Context context, Intent intent) {
         final IWXAPI api = WXAPIFactory.createWXAPI(context, null);
 
     }
 
-        public interface OnResponseListener {
-            void onSuccess();
+    public interface OnResponseListener {
+        void onSuccess();
 
-            void onFail(String message);
-        }
+        void onFail(String message);
+    }
 
 
-    public  void share(Context mContext) {
-        Intent intent = new Intent(Intent.ACTION_SEND); intent.setType("text/plain");
+    public void share(Context mContext) {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
         intent.putExtra(Intent.EXTRA_SUBJECT, "分享");
         intent.putExtra(Intent.EXTRA_TEXT, "交通数据表");
         //extraText为文本的内容

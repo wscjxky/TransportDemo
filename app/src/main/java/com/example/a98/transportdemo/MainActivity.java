@@ -27,7 +27,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Locale;
 
 public class MainActivity extends BaseActivity {
-    private Button button1,button2,button3;
+    private Button button1, button2, button3;
     // APP_ID 替换为你的应用从官方网站申请到的合法appID
     private static final String APP_ID = "wx10e48798def4a607";
 
@@ -47,6 +47,7 @@ public class MainActivity extends BaseActivity {
         req.message = msg;
         api.sendReq(req);
     }
+
     public static String sHA1(Context context) {
         try {
             PackageInfo info = context.getPackageManager().getPackageInfo(
@@ -64,7 +65,7 @@ public class MainActivity extends BaseActivity {
                 hexString.append(":");
             }
             String result = hexString.toString();
-            return result.substring(0, result.length()-1);
+            return result.substring(0, result.length() - 1);
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         } catch (NoSuchAlgorithmException e) {
@@ -72,6 +73,7 @@ public class MainActivity extends BaseActivity {
         }
         return null;
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,34 +82,35 @@ public class MainActivity extends BaseActivity {
         disableAPIDialog();
         init_permission();
 
-        button1=(Button)findViewById(R.id.button1);
-        button1.setOnClickListener(new View.OnClickListener(){
+        button1 = (Button) findViewById(R.id.button1);
+        button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent =new Intent(MainActivity.this,FirstActivity.class);
+                Intent intent = new Intent(MainActivity.this, FirstActivity.class);
                 startActivity(intent);
             }
         });
 
-        button2=(Button)findViewById(R.id.button2);
-        button2.setOnClickListener(new View.OnClickListener(){
+        button2 = (Button) findViewById(R.id.button2);
+        button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent =new Intent(MainActivity.this,SecondActivity.class);
+                Intent intent = new Intent(MainActivity.this, SecondActivity.class);
                 startActivity(intent);
             }
         });
 
-        button3=(Button)findViewById(R.id.button3);
-        button3.setOnClickListener(new View.OnClickListener(){
+        button3 = (Button) findViewById(R.id.button3);
+        button3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent =new Intent(MainActivity.this,ThirdActivity.class);
+                Intent intent = new Intent(MainActivity.this, ThirdActivity.class);
                 startActivity(intent);
             }
         });
     }
-    private void init_permission(){
+
+    private void init_permission() {
         RxPermissionsTool.
                 with(this).
                 addPermission(Manifest.permission.ACCESS_FINE_LOCATION).
@@ -123,9 +126,10 @@ public class MainActivity extends BaseActivity {
                 initPermission();
 
     }
+
     // 消除安卓P出现的弹窗问题
-    private void disableAPIDialog(){
-        if (Build.VERSION.SDK_INT < 28)return;
+    private void disableAPIDialog() {
+        if (Build.VERSION.SDK_INT < 28) return;
         try {
             Class clazz = Class.forName("android.app.ActivityThread");
             Method currentActivityThread = clazz.getDeclaredMethod("currentActivityThread");
