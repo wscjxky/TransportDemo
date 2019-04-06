@@ -1,4 +1,4 @@
-package com.example.a98.transportdemo.locate;
+package com.example.a98.transportdemo.data;
 
 import java.util.List;
 

@@ -17,7 +17,7 @@
         android:layout_width="wrap_content"
         android:layout_height="90dp"
         android:layout_gravity="center"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:background="@drawable/circle_button"
         android:text="录制视频"
         android:textColor="@color/white"
@@ -50,15 +50,14 @@
     <!--app:layout_constraintTop_toBottomOf="@+id/videoView" />-->
     <GridView
         android:id="@+id/video_gridview"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_marginTop="50dp"
-        android:columnWidth="200dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="20dp"
         android:gravity="center"
-        android:horizontalSpacing="10dp"
-        android:numColumns="auto_fit"
+        android:numColumns="2"
         android:stretchMode="columnWidth"
-        android:verticalSpacing="10dp" />
+        android:horizontalSpacing="5dp"
+        android:verticalSpacing="15dp" />
     <!--<ImageView-->
     <!--android:id="@+id/iv_head"-->
     <!--android:layout_width="265dp"-->

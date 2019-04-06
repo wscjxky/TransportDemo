@@ -54,9 +54,9 @@ public class VideoAdapter extends BaseAdapter {
         ImageView imageview;
         if (convertView == null) {
             imageview = new ImageView(mContext);
-            imageview.setLayoutParams(new GridView.LayoutParams(250, 250));
+            imageview.setLayoutParams(new GridView.LayoutParams(500, 400));
             imageview.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageview.setPadding(0, 1, 0, 1);
+            imageview.setPadding(0, 0, 0, 0);
 
         } else {
             imageview = (ImageView) convertView;

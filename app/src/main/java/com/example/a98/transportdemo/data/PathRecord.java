@@ -95,7 +95,7 @@ public class PathRecord {
 
     private String getArea(String dis) {
         float distance = Float.parseFloat(dis);
-        double area = (double) (distance * distance) / (3.1415926 * 2);
+        double area = (double) (distance * distance) / (16.0);
         return Double.toString(area);
     }
 

@@ -11,6 +11,7 @@ import android.widget.ListView;
 import com.example.a98.transportdemo.R;
 import com.example.a98.transportdemo.data.DbAdapter;
 import com.example.a98.transportdemo.data.PathRecord;
+import com.example.a98.transportdemo.data.RecordAdapter;
 
 import java.util.ArrayList;
 import java.util.List;

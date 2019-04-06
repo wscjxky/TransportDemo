@@ -183,12 +183,12 @@ public class ThirdActivity extends Activity implements LocationSource, AMapLocat
         mResultShow = (TextView) findViewById(R.id.show_all_dis);
 
         mTraceoverlay = new TraceOverlay(mAMap);
-        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        manager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
-        assert locationManager != null;
-        locationManager.addGpsStatusListener(gpsStatusListener);
+        assert manager != null;
+        manager.addGpsStatusListener(gpsStatusListener);
 
     }
 
