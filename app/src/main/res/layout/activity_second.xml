@@ -7,24 +7,6 @@
     android:background="@color/oldlace"
     android:orientation="vertical">
 
-    <VideoView
-        android:id="@+id/video_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone"/>
-    <Button
-        android:id="@+id/take_video"
-        android:layout_width="wrap_content"
-        android:layout_height="90dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/circle_button"
-        android:text="录制视频"
-        android:textColor="@color/white"
-        android:textSize="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <!--<VideoView-->
     <!--android:id="@+id/videoView"-->
@@ -51,13 +33,31 @@
     <GridView
         android:id="@+id/video_gridview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="20dp"
+        android:layout_height="450dp"
         android:gravity="center"
+        android:horizontalSpacing="5dp"
         android:numColumns="2"
         android:stretchMode="columnWidth"
-        android:horizontalSpacing="5dp"
         android:verticalSpacing="15dp" />
+
+    <VideoView
+        android:id="@+id/video_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
+
+    <Button
+        android:id="@+id/take_video"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/record"
+        android:textColor="@color/white"
+        android:textSize="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
     <!--<ImageView-->
     <!--android:id="@+id/iv_head"-->
     <!--android:layout_width="265dp"-->
