@@ -1,6 +1,9 @@
 apply plugin: 'com.android.application'
 
 android {
+//    packagingOptions {
+//        exclude 'assets/ap1.data'
+//    }
     lintOptions {
         checkReleaseBuilds false
         // Or, if you prefer, you can continue to check for errors in release builds,
@@ -24,7 +27,7 @@ android {
     }
     defaultConfig {
         ndk {
-            abiFilters "armeabi", "armeabi-v7a", "arm64-v8a", "x86", "arm64-v8a", "x86_64"
+            abiFilters "armeabi", "armeabi-v7a", "arm64-v8a", "x86","x86_64"
         }
     }
 }
@@ -39,11 +42,14 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     compile 'org.xutils:xutils:3.5.1'
     //基础工具库
-    //    compile 'com.amap.api:3dmap:6.8.0'
-    implementation files('libs/Android_Map3D_SDK_V6.8.0_20190401.jar')
+//        compile  'com.amap.api:3dmap:6.7.0'
+//    implementation files('libs/Android_Map3D_SDK_V6.8.0_20190401.jar')
+    compile 'com.amap.api:3dmap:latest.integration'
+    //定位功能
+    compile 'com.amap.api:location:latest.integration'
+    //搜索功能
+    compile 'com.amap.api:search:latest.integration'
 
-    compile 'com.amap.api:location:4.5.1'
-    compile 'com.amap.api:search:6.5.0.1'
     implementation files('libs/Msc.jar')
     implementation 'com.github.vondear.RxTool:RxKit:v2.2.7'
     //UI库
