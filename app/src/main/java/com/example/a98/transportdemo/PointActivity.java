@@ -1,9 +1,6 @@
 package com.example.a98.transportdemo;
 
-import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -12,16 +9,13 @@ import android.os.Build;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.content.FileProvider;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -33,12 +27,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
-import org.w3c.dom.Text;
 import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
-import com.example.a98.transportdemo.util.Share;
 import com.iflytek.cloud.RecognizerResult;
 import com.iflytek.cloud.SpeechConstant;
 import com.iflytek.cloud.SpeechError;
@@ -48,11 +40,9 @@ import com.iflytek.cloud.ui.RecognizerDialog;
 import com.iflytek.cloud.ui.RecognizerDialogListener;
 
 
-public class FirstActivity extends BaseActivity implements View.OnClickListener {
+public class PointActivity extends LocateActivity  {
     public static final int TAKE_PHOTO = 1;
     public static final int TAKE_PHOTO_XI = 2;
-    @ViewInject(R.id.take_photo_xibei)
-    private ImageView photo_view_xibei;
     @ViewInject(R.id.take_photo)
     private ImageView photo_view;
     @ViewInject(R.id.Text1)
@@ -65,8 +55,6 @@ public class FirstActivity extends BaseActivity implements View.OnClickListener 
     private EditText text4;
     @ViewInject(R.id.Text5)
     private EditText text5;
-    @ViewInject(R.id.Text6)
-    private EditText text6;
     @ViewInject(R.id.speak)
     private ImageView speak;
     @ViewInject(R.id.speak1)
@@ -77,9 +65,14 @@ public class FirstActivity extends BaseActivity implements View.OnClickListener 
     private ImageView speak3;
     @ViewInject(R.id.speak4)
     private ImageView speak4;
-    @ViewInject(R.id.speak5)
-    private ImageView speak5;
-
+    @ViewInject(R.id.iv_smallArea)
+    private ImageView iv_smallArea;
+    @ViewInject(R.id.btn_largeArea)
+    private Button btn_largeArea;
+    @ViewInject(R.id.tv_pollArea)
+    private EditText tv_pollArea;
+    @ViewInject(R.id.tv_bearing)
+    private TextView tv_bearing;
     private Uri imageUri;
     //存放听写分析结果文本
     private HashMap<String, String> hashMapTexts = new LinkedHashMap<String, String>();
@@ -92,38 +85,35 @@ public class FirstActivity extends BaseActivity implements View.OnClickListener 
 
     @Event(value = {R.id.speak})
     private void setSpeak(View view) {
-        setRecoder(text1, speak);
+        setRecoder(text1);
     }
 
     @Event(value = {R.id.speak1})
     private void setSpeak1(View view) {
-        setRecoder(text2, speak1);
+        setRecoder(text2);
     }
 
     @Event(value = {R.id.speak2})
     private void setSpeak2(View view) {
-        setRecoder(text3, speak2);
+        setRecoder(text3);
     }
 
     @Event(value = {R.id.speak3})
     private void setSpeak3(View view) {
-        setRecoder(text4, speak3);
+        setRecoder(text4);
     }
 
     @Event(value = {R.id.speak4})
     private void setSpeak4(View view) {
-        setRecoder(text5, speak4);
+        setRecoder(text5);
     }
 
-    @Event(value = {R.id.speak5})
+    @Event(value = {R.id.iv_smallArea})
     private void setSpeak5(View view) {
-        setRecoder(text6, speak5);
+        setRecoder(tv_pollArea);
     }
 
-    @Event(value = {R.id.take_photo_xibei})
-    private void takephoto1(View view) {
-        takephoto(TAKE_PHOTO_XI);
-    }
+
 
     @Event(value = {R.id.take_photo})
     private void takephoto2(View view) {
@@ -142,7 +132,12 @@ public class FirstActivity extends BaseActivity implements View.OnClickListener 
         startActivity(Intent.createChooser(intent, "分享"));
 
     }
+    @Event(value = {R.id.btn_largeArea})
+    private void calucate_area(View view) {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        startActivity(Intent.createChooser(intent, "分享"));
 
+    }
     private void takephoto(int type) {
         File outputImage = new File(getExternalCacheDir(), "output_image.jpg");
         try//判断图片是否存在，存在则删除在创建，不存在则直接创建
@@ -155,7 +150,7 @@ public class FirstActivity extends BaseActivity implements View.OnClickListener 
             e.printStackTrace();
         }
         if (Build.VERSION.SDK_INT >= 24) {
-            imageUri = FileProvider.getUriForFile(FirstActivity.this,
+            imageUri = FileProvider.getUriForFile(PointActivity.this,
                     "com.example.cameraalbumtest.fileprovider", outputImage);
 
         } else {
@@ -163,6 +158,7 @@ public class FirstActivity extends BaseActivity implements View.OnClickListener 
         }
         Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
         intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+        tv_bearing.setText(getBearing());
         startActivityForResult(intent, type);
     }
 
@@ -205,38 +201,22 @@ public class FirstActivity extends BaseActivity implements View.OnClickListener 
                     }
                 }
                 break;
-            case TAKE_PHOTO_XI:
-                try {
-                    Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(imageUri));
-                    int width = bitmap.getWidth();
-                    int height = bitmap.getHeight();
-                    //调整图片角度
-                    Matrix matrix = new Matrix();
-                    matrix.setRotate(90);
-                    Bitmap b2 = bitmap;
-                    b2 = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
-                    photo_view_xibei.setImageBitmap(b2);
-                    //将图片解析成Bitmap对象，并把它显现出来
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
-
             default:
                 break;
         }
     }
 
 
-    private void setRecoder(final EditText edit, final ImageView iv) {
+    private void setRecoder(final EditText edit) {
         flag = true;
         log("sdf");
         // 语音配置对象初始化
-        SpeechUtility.createUtility(FirstActivity.this, SpeechConstant.APPID + "=5b4f2581");
+        SpeechUtility.createUtility(PointActivity.this, SpeechConstant.APPID + "=5b4f2581");
 
         // 1.创建SpeechRecognizer对象，第2个参数：本地听写时传InitListener
-        hearer = SpeechRecognizer.createRecognizer(FirstActivity.this, null);
+        hearer = SpeechRecognizer.createRecognizer(PointActivity.this, null);
         // 交互动画
-        dialog = new RecognizerDialog(FirstActivity.this, null);
+        dialog = new RecognizerDialog(PointActivity.this, null);
         // 2.设置听写参数，详见《科大讯飞MSC API手册(Android)》SpeechConstant类
         hearer.setParameter(SpeechConstant.DOMAIN, "iat"); // domain:域名
         hearer.setParameter(SpeechConstant.LANGUAGE, "zh_cn");
@@ -244,7 +224,6 @@ public class FirstActivity extends BaseActivity implements View.OnClickListener 
 
         //3.开始听写
         dialog.setListener(new RecognizerDialogListener() {  //设置对话框
-
             @Override
             public void onResult(RecognizerResult results, boolean isLast) {
                 Log.d("Result", results.getResultString());
@@ -303,33 +282,6 @@ public class FirstActivity extends BaseActivity implements View.OnClickListener 
 
     }
 
-    @Override
-    public void onClick(View v) {
-        log("asd");
-        switch (v.getId()) {
-            case R.id.speak:
-                setRecoder(text1, speak);
-                break;
-            case R.id.speak1:
-                setRecoder(text2, speak1);
-                break;
-            case R.id.speak2:
-                setRecoder(text3, speak2);
-
-                break;
-            case R.id.speak3:
-                setRecoder(text4, speak3);
-                break;
-            case R.id.speak4:
-                setRecoder(text5, speak4);
-                break;
-            case R.id.speak5:
-                setRecoder(text6, speak5);
-                break;
-            default:
-                break;
-        }
-    }
 
 
 }

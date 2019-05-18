@@ -31,7 +31,7 @@ import static android.media.MediaMetadataRetriever.OPTION_PREVIOUS_SYNC;
 
 @ContentView(R.layout.activity_second)
 
-public class SecondActivity extends BaseActivity {
+public class LineActivity extends BaseActivity {
     public static final int REQUEST_CODE_CAMERA = 1;
     private Button takevideo;
     private SeekBar sbVideo;

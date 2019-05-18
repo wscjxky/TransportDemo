@@ -102,30 +102,11 @@
         app:layout_constraintTop_toBottomOf="@+id/Layout1">
 
         <TextView
+            android:id="@+id/tv_bearing"
             android:layout_width="88dp"
             android:layout_height="50dp"
             android:layout_marginLeft="10dp"
-            android:text="西北角："
-            android:textSize="20sp" />
-
-        <ImageView
-            android:id="@+id/take_photo_xibei"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_marginBottom="284dp"
-            android:clickable="true"
-            android:focusable="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.108"
-            app:layout_constraintStart_toStartOf="parent"
-            app:srcCompat="@drawable/add" />
-
-        <TextView
-            android:layout_width="88dp"
-            android:layout_height="50dp"
-            android:layout_marginLeft="40dp"
-            android:text="东南角："
+            android:text=""
             android:textSize="20sp" />
 
         <ImageView
@@ -140,6 +121,7 @@
             app:layout_constraintHorizontal_bias="0.108"
             app:layout_constraintStart_toStartOf="parent"
             app:srcCompat="@drawable/add" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -281,22 +263,26 @@
             android:layout_height="50dp"
             android:text="污染物面积："
             android:textSize="19sp" />
-
         <EditText
-            android:id="@+id/Text6"
-            android:layout_width="220dp"
+            android:id="@+id/tv_pollArea"
+            android:layout_width="140dp"
             android:layout_height="50dp"
-            android:background="@null"
-            android:hint="请输入"
-            android:paddingLeft="2dp"
-            android:textSize="20sp" />
+            android:text=""
+            android:textSize="19sp" />
 
         <ImageView
-            android:id="@+id/speak5"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:id="@+id/iv_smallArea"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:background="@drawable/fab_bg_mini"
-            android:text="语音" />
+            android:text="小"/>
+        <Button
+            android:background="@drawable/btn_bg_red"
+            android:id="@+id/btn_largeArea"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:text="大面积"/>
     </LinearLayout>
 
     <Button

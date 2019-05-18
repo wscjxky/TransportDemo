@@ -474,9 +474,9 @@ public class ThirdActivity extends Activity implements LocationSource, AMapLocat
             }
         } else if (lineID == 2) {
             if (linepoints != null && linepoints.size() > 0) {
-                mAMap.addPolyline(new PolylineOptions()
-                        .color(Color.RED)
-                        .width(40).addAll(linepoints));
+//                mAMap.addPolyline(new PolylineOptions()
+//                        .color(Color.RED)
+//                        .width(40).addAll(linepoints));
             }
         }
 
@@ -494,6 +494,9 @@ public class ThirdActivity extends Activity implements LocationSource, AMapLocat
         }
         return distance;
     }
-
+    public static void actionstart(Context context ){
+        Intent intent=new Intent(context,ThirdActivity.class);
+        context.startActivity(intent);
+    }
 
 }

@@ -10,10 +10,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.amap.api.location.AMapLocation;
+import com.amap.api.location.AMapLocationClient;
+import com.amap.api.location.AMapLocationListener;
+
 import org.xutils.x;
 
 public abstract class BaseActivity extends AppCompatActivity {
     //添加 menu
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
@@ -28,10 +33,11 @@ public abstract class BaseActivity extends AppCompatActivity {
         return true;
     }
 
-    public void log(String str) {
-        Log.e("debug_log", str);
+    public void log(Object str) {
+        Log.e("debug_log", str.toString());
 
     }
+
 
     //menu的点击事件
     @Override

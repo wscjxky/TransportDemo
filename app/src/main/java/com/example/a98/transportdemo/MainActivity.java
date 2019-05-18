@@ -5,8 +5,6 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
-import android.provider.MediaStore;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.*;
 import android.widget.*;
@@ -19,7 +17,6 @@ import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import com.vondear.rxtool.RxPermissionsTool;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.security.MessageDigest;
@@ -86,7 +83,7 @@ public class MainActivity extends BaseActivity {
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, FirstActivity.class);
+                Intent intent = new Intent(MainActivity.this, PointActivity.class);
                 startActivity(intent);
             }
         });
@@ -95,7 +92,7 @@ public class MainActivity extends BaseActivity {
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, SecondActivity.class);
+                Intent intent = new Intent(MainActivity.this, LineActivity.class);
                 startActivity(intent);
             }
         });
