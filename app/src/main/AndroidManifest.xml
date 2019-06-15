@@ -15,10 +15,15 @@
         <meta-data
             android:name="com.amap.api.v2.apikey"
             android:value="8f2d2b5634ce39a5c1c075f36ec75dd8" />
-        <service android:name="com.amap.api.location.APSService"></service>
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
+
+        <service android:name="com.amap.api.location.APSService" />
 
         <activity android:name=".BaseActivity" />
         <activity android:name=".LocateActivity" />
+        <activity android:name=".util.CheckVersionActivity" />
 
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -26,10 +31,25 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".record_point.PointActivity"/>
+        <activity android:name=".record_point.ImageSelectorActivity" android:theme="@style/AppTheme_NoBar"/>
+        <activity android:name=".record_point.FinishActivity" />
+        <activity android:name="com.yongchun.library.view.ImagePreviewActivity" android:theme="@style/AppTheme_NoBar"/>
+        <activity android:name="com.yongchun.library.view.ImageCropActivity" android:theme="@style/AppTheme_NoBar"/>
+        <activity android:name=".record_point.TakePhotoActivity"
+            android:theme="@style/AppTheme_NoBar"/>
+        <activity android:name=".record_point.AreaActivity" />
 
-        <activity android:name=".PointActivity" />
-        <activity android:name=".LineActivity" />
-        <activity android:name=".ThirdActivity" />
+        <activity android:name=".record_road.VideoActivity" />
+        <activity android:name=".record_road.AngleActivity"  android:theme="@style/AppTheme_NoBar"/>
+        <activity android:name=".record_road.ChooseActivity" />
+        <activity android:name=".record_road.SatelliteActivity" android:theme="@style/AppTheme_NoBar"/>
+        <activity android:name=".record_road.RadiusActivity"  android:theme="@style/AppTheme_NoBar"/>
+        <activity android:name=".record_road.AltitudeActivity" android:theme="@style/AppTheme_NoBar" />
+
+
+
+        <activity android:name=".locate.LocationActivity" />
         <activity android:name=".locate.RecordActivity" />
         <activity android:name=".locate.RecordShowActivity" />
 
@@ -47,15 +67,12 @@
     </application>
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"></uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <!-- 精确的位置权限 -->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
-    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
-
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <!--连接网络权限，用于执行云端语音能力 -->
     <uses-permission android:name="android.permission.INTERNET" />

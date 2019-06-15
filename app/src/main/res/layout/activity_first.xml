@@ -4,9 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/oldlace"
-  >
-
+    android:id="@+id/rl_activity_first"
+    android:background="@color/oldlace">
 
     <LinearLayout
         android:id="@+id/Layout1"
@@ -41,9 +40,9 @@
 
         <ImageView
             android:id="@+id/speak"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/fab_bg_mini"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/box_blue_record"
             android:text="语音" />
 
     </LinearLayout>
@@ -80,49 +79,49 @@
 
         <ImageView
             android:id="@+id/speak1"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/fab_bg_mini"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/box_blue_record"
             android:text="语音" />
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/Layout2"
-        android:layout_width="406dp"
-        android:layout_height="80dp"
-        android:layout_marginTop="332dp"
-        android:gravity="left|center_horizontal"
-        android:orientation="horizontal"
-        android:paddingLeft="10dp"
-        android:paddingTop="0dp"
-        android:paddingBottom="0dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Layout1">
+    <!--<LinearLayout-->
+        <!--android:id="@+id/Layout2"-->
+        <!--android:layout_width="406dp"-->
+        <!--android:layout_height="80dp"-->
+        <!--android:layout_marginTop="332dp"-->
+        <!--android:gravity="left|center_horizontal"-->
+        <!--android:orientation="horizontal"-->
+        <!--android:paddingLeft="10dp"-->
+        <!--android:paddingTop="0dp"-->
+        <!--android:paddingBottom="0dp"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintHorizontal_bias="1.0"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/Layout1">-->
 
-        <TextView
-            android:id="@+id/tv_bearing"
-            android:layout_width="88dp"
-            android:layout_height="50dp"
-            android:layout_marginLeft="10dp"
-            android:text=""
-            android:textSize="20sp" />
+        <!--<TextView-->
+            <!--android:id="@+id/tv_bearing"-->
+            <!--android:layout_width="88dp"-->
+            <!--android:layout_height="50dp"-->
+            <!--android:layout_marginLeft="10dp"-->
+            <!--android:text="实地拍照"-->
+            <!--android:textSize="20sp" />-->
 
-        <ImageView
-            android:id="@+id/take_photo"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_marginBottom="284dp"
-            android:clickable="true"
-            android:focusable="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.108"
-            app:layout_constraintStart_toStartOf="parent"
-            app:srcCompat="@drawable/add" />
+        <!--<ImageView-->
+            <!--android:id="@+id/take_photo"-->
+            <!--android:layout_width="80dp"-->
+            <!--android:layout_height="80dp"-->
+            <!--android:layout_marginBottom="284dp"-->
+            <!--android:clickable="true"-->
+            <!--android:focusable="true"-->
+            <!--app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--app:layout_constraintEnd_toEndOf="parent"-->
+            <!--app:layout_constraintHorizontal_bias="0.108"-->
+            <!--app:layout_constraintStart_toStartOf="parent"-->
+            <!--app:srcCompat="@drawable/add" />-->
 
-    </LinearLayout>
+    <!--</LinearLayout>-->
 
     <LinearLayout
         android:id="@+id/Layout2"
@@ -157,9 +156,9 @@
 
         <ImageView
             android:id="@+id/speak3"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/fab_bg_mini"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/box_blue_record"
             android:text="语音" />
     </LinearLayout>
 
@@ -196,9 +195,9 @@
 
         <ImageView
             android:id="@+id/speak2"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/fab_bg_mini"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/box_blue_record"
             android:text="语音" />
 
     </LinearLayout>
@@ -236,9 +235,9 @@
 
         <ImageView
             android:id="@+id/speak4"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/fab_bg_mini"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/box_blue_record"
             android:text="语音" />
     </LinearLayout>
 
@@ -265,7 +264,7 @@
             android:textSize="19sp" />
         <EditText
             android:id="@+id/tv_pollArea"
-            android:layout_width="140dp"
+            android:layout_width="168dp"
             android:layout_height="50dp"
             android:text=""
             android:textSize="19sp" />
@@ -274,32 +273,31 @@
             android:id="@+id/iv_smallArea"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/fab_bg_mini"
+            android:background="@drawable/box_blue_record"
             android:text="小"/>
         <Button
-            android:background="@drawable/btn_bg_red"
+            android:background="@drawable/ext_dev"
             android:id="@+id/btn_largeArea"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/white"
-            android:text="大面积"/>
+           />
     </LinearLayout>
 
-    <Button
+        <Button
 
-        android:id="@+id/button_submit"
-        android:layout_width="350dp"
-        android:layout_height="40dp"
-        android:layout_marginBottom="48dp"
-        android:background="@drawable/btn_bg_red"
-        android:text="提交"
-        android:textColor="@color/white"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
-        app:layout_constraintStart_toStartOf="parent" />
-
+            android:id="@+id/button_submit"
+            android:layout_width="350dp"
+            android:layout_height="40dp"
+            android:layout_marginBottom="84dp"
+            android:background="@drawable/btn_round_green_disable"
+            android:text="下一步"
+            android:textColor="@color/white"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.491"
+            app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/bridge"

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <com.amap.api.maps2d.MapView
+            android:id="@+id/map"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|left"
+            android:layout_margin="5dp"
+            android:padding="10dp"
+            android:background="@drawable/setbar_bg">
+
+
+            <TextView
+                android:id="@+id/tv_position"
+                style="@style/white_text"
+                android:layout_width="@dimen/dp_200"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:text="当前位置"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginTop="@dimen/dp_50"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|right"
+            android:background="@color/transparent"
+            android:orientation="vertical"
+            android:padding="5dp" >
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" >
+
+                    <Button
+                        android:layout_marginBottom="@dimen/dp_15"
+                        android:id="@+id/btn_add_point"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/dp_10"
+                        android:background="@drawable/setbar_bg"
+                        android:textColor="@color/white"
+                        android:text="添加新点" />
+
+                    <Button
+                        android:layout_marginBottom="@dimen/dp_15"
+
+                        android:id="@+id/btn_clear_point"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/dp_10"
+                        android:background="@drawable/setbar_bg"
+                        android:textColor="@color/white"
+                        android:text="清除" />
+                    <Button
+                        android:layout_marginBottom="@dimen/dp_15"
+                        android:id="@+id/btn_cal_radius"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/dp_10"
+                        android:background="@drawable/setbar_bg"
+                        android:textColor="@color/white"
+                        android:text="完成" />
+                    <Button
+                        android:id="@+id/tv_radius"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/setbar_bg"
+                        android:textColor="@color/white"
+                        android:text="半径" />
+            </LinearLayout>
+        </LinearLayout>
+    </FrameLayout>
+
+</LinearLayout>

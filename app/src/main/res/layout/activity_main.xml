@@ -65,36 +65,36 @@
                 android:textSize="18sp" />
 
         </LinearLayout>
+    <!--<LinearLayout-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+
+        <!--android:orientation="vertical">-->
+        <!--<Button-->
+            <!--android:id="@+id/button2"-->
+            <!--android:layout_width="80dp"-->
+            <!--android:layout_height="80dp"-->
+            <!--android:layout_marginEnd="30dp"-->
+            <!--android:layout_marginStart="30dp"-->
+
+            <!--android:background="@drawable/busi_403"-->
+            <!--android:textColor="@color/white"-->
+            <!--android:textSize="40sp"-->
+            <!--/>-->
+        <!--<TextView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:gravity="center"-->
+            <!--android:text="视频勘测"-->
+            <!--android:textColor="@color/black"-->
+            <!--android:textSize="18sp" />-->
+    <!--</LinearLayout>-->
+
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
-        android:orientation="vertical">
-        <Button
-            android:id="@+id/button2"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_marginEnd="30dp"
-            android:layout_marginStart="30dp"
-
-            android:background="@drawable/busi_403"
-            android:textColor="@color/white"
-            android:textSize="40sp"
-            />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="视频勘测"
-            android:textColor="@color/black"
-            android:textSize="18sp" />
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-
+        android:layout_marginLeft="@dimen/dp_45"
         android:orientation="vertical">
         <Button
             android:id="@+id/button3"

@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fbutton="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/oldlace"
+    tools:context=".MainActivity">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="390dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:gravity="center">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:orientation="vertical">
+
+            <Button
+                android:layout_marginTop="2dp"
+                android:id="@+id/btn_satellite"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:background="@drawable/busi_105"
+                android:textColor="@color/white"
+                android:textSize="40sp"
+
+                tools:layout_editor_absoluteX="173dp"
+                tools:layout_editor_absoluteY="225dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="卫星云图"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:orientation="vertical">
+            <Button
+                android:id="@+id/btn_radius"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginEnd="30dp"
+                android:layout_marginStart="30dp"
+
+                android:background="@drawable/busi_310"
+                android:textColor="@color/white"
+                android:textSize="40sp"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="弯道勘测"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:orientation="vertical">
+            <Button
+                android:id="@+id/btn_altitude"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:background="@drawable/busi_212"
+                android:textColor="@color/white"
+
+                android:textSize="40sp"
+                tools:layout_editor_absoluteX="173dp"
+                tools:layout_editor_absoluteY="225dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="海拔勘测"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_marginTop="@dimen/dp_150"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:gravity="center">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:orientation="vertical">
+
+            <Button
+                android:layout_marginTop="2dp"
+                android:id="@+id/btn_angle"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:background="@drawable/busi_304"
+                android:textColor="@color/white"
+                android:textSize="40sp"
+
+                tools:layout_editor_absoluteX="173dp"
+                tools:layout_editor_absoluteY="225dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="交角勘测"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:orientation="vertical">
+            <Button
+                android:id="@+id/btn_video"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginEnd="30dp"
+                android:layout_marginStart="30dp"
+
+                android:background="@drawable/busi_403"
+                android:textColor="@color/white"
+                android:textSize="40sp"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="视频勘测"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:orientation="vertical">
+            <Button
+                android:id="@+id/btn_altitude"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:background="@drawable/busi_315"
+                android:textColor="@color/white"
+
+                android:textSize="40sp"
+                tools:layout_editor_absoluteX="173dp"
+                tools:layout_editor_absoluteY="225dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="待开发"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.amap.api.maps2d.MapView
+            android:id="@+id/map"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|left"
+            android:layout_margin="5dp"
+            android:background="@drawable/setbar_bg"
+            android:padding="10dp">
+
+
+            <TextView
+                android:id="@+id/tv_position"
+                style="@style/white_text"
+                android:layout_width="@dimen/dp_200"
+                android:layout_height="wrap_content"
+                android:text="当前位置"
+                android:textAlignment="center"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|right"
+            android:layout_marginTop="@dimen/dp_50"
+            android:background="@color/transparent"
+            android:orientation="vertical"
+            android:padding="5dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/btn_add_point"
+                    style="@style/button_right"
+
+                    android:text="添加新点" />
+
+                <Button
+                    style="@style/button_right"
+                    android:id="@+id/btn_clear_point"
+                    android:textColor="@color/white"
+                    android:text="清除" />
+
+                <Button
+                    style="@style/button_right"
+
+                    android:id="@+id/btn_cal_angle"
+
+                    android:text="完成" />
+                <Button
+                    style="@style/button_right"
+                    android:id="@+id/btn_angle"
+                    android:textColor="@color/white"
+                    android:text="交角" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </FrameLayout>
+
+</LinearLayout>

@@ -35,6 +35,7 @@
         android:layout_width="match_parent"
         android:layout_height="450dp"
         android:gravity="center"
+        android:layout_marginTop="@dimen/dp_30"
         android:horizontalSpacing="5dp"
         android:numColumns="2"
         android:stretchMode="columnWidth"

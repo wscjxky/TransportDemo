@@ -1,25 +1,22 @@
-package com.example.a98.transportdemo;
+package com.example.a98.transportdemo.record_point;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.net.Uri;
-import android.os.Build;
-import android.provider.MediaStore;
 import android.support.annotation.Nullable;
-import android.support.v4.content.FileProvider;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
@@ -31,6 +28,9 @@ import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
+import com.example.a98.transportdemo.LocateActivity;
+import com.example.a98.transportdemo.R;
+import com.example.a98.transportdemo.record_road.ChooseActivity;
 import com.iflytek.cloud.RecognizerResult;
 import com.iflytek.cloud.SpeechConstant;
 import com.iflytek.cloud.SpeechError;
@@ -38,13 +38,20 @@ import com.iflytek.cloud.SpeechRecognizer;
 import com.iflytek.cloud.SpeechUtility;
 import com.iflytek.cloud.ui.RecognizerDialog;
 import com.iflytek.cloud.ui.RecognizerDialogListener;
+import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.impl.AttachListPopupView;
+import com.lxj.xpopup.interfaces.OnSelectListener;
+import com.lxj.xpopup.interfaces.XPopupCallback;
+import com.vondear.rxtool.RxSPTool;
+import com.vondear.rxtool.RxTool;
+import com.vondear.rxui.view.popupwindows.RxPopupImply;
+import com.vondear.rxui.view.popupwindows.tools.RxPopupView;
+import com.vondear.rxui.view.popupwindows.tools.RxPopupViewManager;
 
 
-public class PointActivity extends LocateActivity  {
-    public static final int TAKE_PHOTO = 1;
-    public static final int TAKE_PHOTO_XI = 2;
-    @ViewInject(R.id.take_photo)
-    private ImageView photo_view;
+public class PointActivity extends LocateActivity {
+    //    @ViewInject(R.id.take_photo)
+//    private ImageView photo_view;
     @ViewInject(R.id.Text1)
     private EditText text1;
     @ViewInject(R.id.Text2)
@@ -71,95 +78,35 @@ public class PointActivity extends LocateActivity  {
     private Button btn_largeArea;
     @ViewInject(R.id.tv_pollArea)
     private EditText tv_pollArea;
-    @ViewInject(R.id.tv_bearing)
-    private TextView tv_bearing;
+    @ViewInject(R.id.bridge2)
+    private EditText bridge;
+    RxPopupViewManager mRxPopupViewManager;
+    private RxPopupImply popupImply;//提示  一小时后有惊喜
+
+    //    @ViewInject(R.id.tv_bearing)
+//    private TextView tv_bearing;
     private Uri imageUri;
+    private ArrayList<EditText> table = new ArrayList<>();
     //存放听写分析结果文本
     private HashMap<String, String> hashMapTexts = new LinkedHashMap<String, String>();
     SpeechRecognizer hearer;  //听写对象
     RecognizerDialog dialog;  //讯飞提示框
     private boolean flag;
-    private boolean exist;
-    private TextView bridge;
-    private EditText bridge2;
-
-    @Event(value = {R.id.speak})
-    private void setSpeak(View view) {
-        setRecoder(text1);
-    }
-
-    @Event(value = {R.id.speak1})
-    private void setSpeak1(View view) {
-        setRecoder(text2);
-    }
-
-    @Event(value = {R.id.speak2})
-    private void setSpeak2(View view) {
-        setRecoder(text3);
-    }
-
-    @Event(value = {R.id.speak3})
-    private void setSpeak3(View view) {
-        setRecoder(text4);
-    }
-
-    @Event(value = {R.id.speak4})
-    private void setSpeak4(View view) {
-        setRecoder(text5);
-    }
-
-    @Event(value = {R.id.iv_smallArea})
-    private void setSpeak5(View view) {
-        setRecoder(tv_pollArea);
-    }
-
-
-
-    @Event(value = {R.id.take_photo})
-    private void takephoto2(View view) {
-        takephoto(TAKE_PHOTO);
-    }
+    @ViewInject(R.id.button_submit)
+    private Button button_submit;
 
     @Event(value = {R.id.button_submit})
     private void submit(View view) {
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType("text/plain");
-        intent.putExtra(Intent.EXTRA_SUBJECT, "分享");
-        intent.putExtra(Intent.EXTRA_TEXT, "交通" +
-                "数据表.xls");
-        //extraText为文本的内容
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(Intent.createChooser(intent, "分享"));
-
+        saveTable();
+        Intent intent = new Intent(this, ImageSelectorActivity.class);
+        startActivity(intent);
+//        finish();
     }
+
     @Event(value = {R.id.btn_largeArea})
     private void calucate_area(View view) {
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        startActivity(Intent.createChooser(intent, "分享"));
-
-    }
-    private void takephoto(int type) {
-        File outputImage = new File(getExternalCacheDir(), "output_image.jpg");
-        try//判断图片是否存在，存在则删除在创建，不存在则直接创建
-        {
-            if (outputImage.exists()) {
-                outputImage.delete();
-            }
-            outputImage.createNewFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        if (Build.VERSION.SDK_INT >= 24) {
-            imageUri = FileProvider.getUriForFile(PointActivity.this,
-                    "com.example.cameraalbumtest.fileprovider", outputImage);
-
-        } else {
-            imageUri = Uri.fromFile(outputImage);
-        }
-        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-        tv_bearing.setText(getBearing());
-        startActivityForResult(intent, type);
+        Intent intent = new Intent(PointActivity.this, AreaActivity.class);
+        startActivityForResult(intent, REQUEST_LARGE_AREA_ACTIVITY);
     }
 
 
@@ -167,13 +114,43 @@ public class PointActivity extends LocateActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_first);
         x.view().inject(this); //绑定注解
-        photo_view = (ImageView) findViewById(R.id.take_photo);
-        bridge = findViewById(R.id.bridge);
-        bridge2 = findViewById(R.id.bridge2);
+        table.add(text1);
+        table.add(text2);
+        table.add(text3);
+        table.add(text4);
+        table.add(text5);
+        table.add(tv_pollArea);
+        setTable();
+        initPop();
 
-        bridge = (TextView) findViewById(R.id.bridge);
-        bridge2 = (EditText) findViewById(R.id.bridge2);
+    }
+    private void initPop(){
+        XPopup.Builder pv = new XPopup.Builder(this)
+                .atView(speak).setPopupCallback(new XPopupCallback() {
+                    @Override
+                    public void onShow() {
+                    }
 
+                    @Override
+                    public void onDismiss() {
+                        new XPopup.Builder(PointActivity.this)
+                                .atView(button_submit)
+                                .asAttachList(new String[]{"点击这里保存进入一下步"}, new int[]{},
+                                        new OnSelectListener() {
+                                            @Override
+                                            public void onSelect(int position, String text) {
+                                            }
+                                        })
+                                .show();
+                    }
+                });
+        pv.asAttachList(new String[]{"点击这里打开语音输入"}, new int[]{},
+                new OnSelectListener() {
+                    @Override
+                    public void onSelect(int position, String text) {
+                    }
+                })
+                .show();
     }
 
     //    @Event(value = {R.id.button_submit})
@@ -181,31 +158,6 @@ public class PointActivity extends LocateActivity  {
 //        Toast.makeText(this,"bt1测试",Toast.LENGTH_LONG).show();
 //    }
     //处理返回结果的函数，下面是隐示Intent的返回结果的处理方式，具体见以前我所发的intent讲解
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        switch (requestCode) {
-            case TAKE_PHOTO:
-                if (resultCode == RESULT_OK) {
-                    try {
-                        Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(imageUri));
-                        int width = bitmap.getWidth();
-                        int height = bitmap.getHeight();
-                        //调整图片角度
-                        Matrix matrix = new Matrix();
-                        matrix.setRotate(90);
-                        Bitmap b2 = bitmap;
-                        b2 = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
-                        photo_view.setImageBitmap(b2);
-                        //将图片解析成Bitmap对象，并把它显现出来
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                }
-                break;
-            default:
-                break;
-        }
-    }
-
 
     private void setRecoder(final EditText edit) {
         flag = true;
@@ -282,7 +234,88 @@ public class PointActivity extends LocateActivity  {
 
     }
 
+    private void saveTable() {
+        int count = 0;
+        for (EditText et : table) {
+            RxSPTool.putString(this, "text" + count, et.getText().toString());
+            count += 1;
+        }
+    }
 
+    private void setTable() {
+        int count = 0;
+        for (EditText et : table) {
+            String text = RxSPTool.getString(this, "text" + count);
+            count += 1;
+            if (!text.isEmpty())
+                et.setText(text);
+        }
+    }
+
+    @Event(value = {R.id.speak})
+    private void setSpeak(View view) {
+        setRecoder(text1);
+    }
+
+    @Event(value = {R.id.speak1})
+    private void setSpeak1(View view) {
+        setRecoder(text2);
+    }
+
+    @Event(value = {R.id.speak2})
+    private void setSpeak2(View view) {
+        setRecoder(text3);
+    }
+
+    @Event(value = {R.id.speak3})
+    private void setSpeak3(View view) {
+        setRecoder(text4);
+    }
+
+    @Event(value = {R.id.speak4})
+    private void setSpeak4(View view) {
+        setRecoder(text5);
+    }
+
+    @Event(value = {R.id.iv_smallArea})
+    private void setSpeak5(View view) {
+        setRecoder(tv_pollArea);
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent intent) {
+
+        switch (requestCode) {
+            case POINT_TAKE_PHOTO:
+                String bearing_str = "";
+                ArrayList<String> images = (ArrayList<String>) intent.getSerializableExtra(ImageSelectorActivity.REQUEST_OUTPUT);
+                ArrayList<String> bearings = (ArrayList<String>) intent.getSerializableExtra("bearings");
+                Bitmap bitmap = BitmapFactory.decodeFile(images.get(0));
+                int width = bitmap.getWidth();
+                int height = bitmap.getHeight();
+                //调整图片角度
+                Matrix matrix = new Matrix();
+                matrix.setRotate(90);
+                Bitmap b2 = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
+//                    photo_view.setImageBitmap(b2);
+                for (String bearing : bearings) {
+                    bearing_str = bearing + ",";
+                }
+//                tv_bearing.setText(bearing_str);
+                break;
+            case REQUEST_LARGE_AREA_ACTIVITY:
+                try {
+                    String area = "1";
+                    assert intent != null;
+                    area = intent.getStringExtra("area");
+                    tv_pollArea.setText(area);
+                } catch (Exception e) {
+                    break;
+                }
+                break;
+            default:
+                break;
+        }
+    }
 
 }
 

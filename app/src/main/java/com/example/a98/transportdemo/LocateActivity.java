@@ -1,11 +1,16 @@
 package com.example.a98.transportdemo;
 
+import android.os.Bundle;
 import android.util.Log;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
+import com.amap.api.maps2d.MapView;
+
+import org.xutils.view.annotation.ViewInject;
+import org.xutils.x;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -14,14 +19,19 @@ public class LocateActivity  extends BaseActivity {
     public AMapLocationClient mLocationClient = null;
     public AMapLocationClientOption mLocationOption = null;
     public AMapLocationListener mLocationListener =null;
+
     public AMapLocation amapLocation;
     public Float bearing = (float) 0;
 
     public String getBearing() {
         return Float.toString(bearing);
     }
-
-    public LocateActivity(){
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        initLocate();
+    }
+    public void initLocate(){
         mLocationListener = new AMapLocationListener(){
             @Override
             public void onLocationChanged(AMapLocation amapLocation) {
@@ -60,10 +70,12 @@ public class LocateActivity  extends BaseActivity {
         mLocationClient = new AMapLocationClient(this);
         mLocationClient.setLocationListener(mLocationListener);
         mLocationOption = new AMapLocationClientOption();
-        mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
-        mLocationOption.setInterval(1000);
-        mLocationOption.setLocationCacheEnable(false);
+        mLocationOption.setLocationPurpose(AMapLocationClientOption.AMapLocationPurpose.SignIn);
         mLocationClient.setLocationOption(mLocationOption);
-        mLocationClient.startLocation();
     }
+    /**
+     * 方法必须重写
+     */
+
+
 }

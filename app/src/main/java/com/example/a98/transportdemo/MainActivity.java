@@ -10,6 +10,11 @@ import android.view.*;
 import android.widget.*;
 import android.content.Intent;
 
+import com.example.a98.transportdemo.record_point.PointActivity;
+import com.example.a98.transportdemo.record_road.AltitudeActivity;
+import com.example.a98.transportdemo.record_road.ChooseActivity;
+import com.example.a98.transportdemo.record_road.RadiusActivity;
+import com.example.a98.transportdemo.record_road.SatelliteActivity;
 import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
 import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
 import com.tencent.mm.opensdk.modelmsg.WXTextObject;
@@ -88,20 +93,20 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-        button2 = (Button) findViewById(R.id.button2);
-        button2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, LineActivity.class);
-                startActivity(intent);
-            }
-        });
+//        button2 = (Button) findViewById(R.id.button2);
+//        button2.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(MainActivity.this, VideoActivity.class);
+//                startActivity(intent);
+//            }
+//        });
 
         button3 = (Button) findViewById(R.id.button3);
         button3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ThirdActivity.class);
+                Intent intent = new Intent(MainActivity.this, ChooseActivity.class);
                 startActivity(intent);
             }
         });

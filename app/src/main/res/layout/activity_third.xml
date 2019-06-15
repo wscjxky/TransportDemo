@@ -24,7 +24,7 @@
             android:textColor="@color/white"
             android:textOff="开始"
             android:textOn="停止"
-            android:textSize="18sp"></ToggleButton>
+            android:textSize="18sp" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -53,7 +53,7 @@
             android:onClick="record">
 
             <Button
-                android:id="@+id/title_tv_option"
+                android:id="@+id/btn_finish"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
@@ -64,7 +64,6 @@
                 android:textColor="@color/white"
                 android:textSize="18sp" />
         </LinearLayout>
-
     </RelativeLayout>
 
     <com.amap.api.maps.MapView
