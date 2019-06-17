@@ -1,12 +1,8 @@
 package com.example.a98.transportdemo.record_road;
 
-import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -24,9 +20,7 @@ import com.amap.api.maps2d.model.Marker;
 import com.amap.api.maps2d.model.MarkerOptions;
 import com.amap.api.maps2d.model.MyLocationStyle;
 import com.example.a98.transportdemo.BaseActivity;
-import com.example.a98.transportdemo.LocateActivity;
 import com.example.a98.transportdemo.R;
-import com.vondear.rxtool.RxLocationTool;
 
 import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
@@ -35,10 +29,8 @@ import org.xutils.x;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.a98.transportdemo.util.Calculate.gen_angle;
 import static com.example.a98.transportdemo.util.Calculate.gen_circle;
 import static com.example.a98.transportdemo.util.Calculate.gen_double_string;
-import static com.example.a98.transportdemo.util.Calculate.gen_radius;
 
 /**
  * AMapV2地图中简单介绍一些Marker的用法.
@@ -50,6 +42,8 @@ public class RadiusActivity extends BaseActivity implements AMapLocationListener
     private TextView tv_position;
     @ViewInject(R.id.map)
     private MapView mapView;
+    @ViewInject(R.id.btn_add_point)
+    private Button btn_add_point;
     private AMap aMap;
     private AMapLocationClient locationClient = null;
     private  MyLocationStyle myLocationStyle;
@@ -57,7 +51,7 @@ public class RadiusActivity extends BaseActivity implements AMapLocationListener
     private MarkerOptions markerOption;
     private float circle_radius=0;
     private LatLng  circle_point = new LatLng(0, 0);
-
+    private LatLng current_positions;
     private LatLng latlng = new LatLng(39.761, 116.434);
     @Event(R.id.btn_cal_radius)
     private void cal_radius(View v) {
@@ -96,10 +90,9 @@ public class RadiusActivity extends BaseActivity implements AMapLocationListener
     }
     @Event(R.id.btn_add_point)
     private void add_point(View v) {
-        log("正在获取位置...");
-        if(null != locationClient) {
-            //签到只需调用startLocation即可
-            locationClient.startLocation();
+        if (current_positions!=null) {
+            addMarkersToMap(current_positions);
+            show_toast("添加点成功");
         }
     }
     @Override
@@ -108,8 +101,12 @@ public class RadiusActivity extends BaseActivity implements AMapLocationListener
         setContentView(R.layout.activity_radius);
         x.view().inject(this);
         mapView.onCreate(savedInstanceState); // 此方法必须重写
+        mContext=RadiusActivity.this;
         initmap();
         initBlueP(aMap);
+        initPop(mContext,btn_add_point,"添加新点,长按红点后可拖动,最少需要三个点位");
+
+
 
     }
     private void initmap(){
@@ -188,6 +185,9 @@ public class RadiusActivity extends BaseActivity implements AMapLocationListener
                 + marker.getPosition().latitude + ","
                 + marker.getPosition().longitude + ")";
 //        tv_position.setText(curDes);
+
+        addMarkersToMap(marker.getPosition());
+
     }
 
     @Override
@@ -198,6 +198,8 @@ public class RadiusActivity extends BaseActivity implements AMapLocationListener
                     + aMapLocation.getLatitude()+ ","
                     + aMapLocation.getLongitude() + ")";
             tv_position.setText(curDes);
+            current_positions=new LatLng(aMapLocation.getLatitude(),aMapLocation.getLongitude());
+
 
         } else {
             //可以记录错误信息，或者根据错误错提示用户进行操作，Demo中只是打印日志

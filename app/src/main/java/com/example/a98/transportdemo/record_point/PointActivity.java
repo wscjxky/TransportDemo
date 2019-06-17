@@ -5,20 +5,27 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.net.Uri;
-import android.support.annotation.Nullable;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
+import com.example.a98.transportdemo.LocateActivity;
+import com.example.a98.transportdemo.R;
+import com.iflytek.cloud.RecognizerResult;
+import com.iflytek.cloud.SpeechConstant;
+import com.iflytek.cloud.SpeechError;
+import com.iflytek.cloud.SpeechRecognizer;
+import com.iflytek.cloud.SpeechUtility;
+import com.iflytek.cloud.ui.RecognizerDialog;
+import com.iflytek.cloud.ui.RecognizerDialogListener;
+import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.interfaces.OnSelectListener;
+import com.lxj.xpopup.interfaces.XPopupCallback;
+import com.vondear.rxtool.RxSPTool;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,25 +35,9 @@ import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
-import com.example.a98.transportdemo.LocateActivity;
-import com.example.a98.transportdemo.R;
-import com.example.a98.transportdemo.record_road.ChooseActivity;
-import com.iflytek.cloud.RecognizerResult;
-import com.iflytek.cloud.SpeechConstant;
-import com.iflytek.cloud.SpeechError;
-import com.iflytek.cloud.SpeechRecognizer;
-import com.iflytek.cloud.SpeechUtility;
-import com.iflytek.cloud.ui.RecognizerDialog;
-import com.iflytek.cloud.ui.RecognizerDialogListener;
-import com.lxj.xpopup.XPopup;
-import com.lxj.xpopup.impl.AttachListPopupView;
-import com.lxj.xpopup.interfaces.OnSelectListener;
-import com.lxj.xpopup.interfaces.XPopupCallback;
-import com.vondear.rxtool.RxSPTool;
-import com.vondear.rxtool.RxTool;
-import com.vondear.rxui.view.popupwindows.RxPopupImply;
-import com.vondear.rxui.view.popupwindows.tools.RxPopupView;
-import com.vondear.rxui.view.popupwindows.tools.RxPopupViewManager;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 
 public class PointActivity extends LocateActivity {
@@ -80,8 +71,6 @@ public class PointActivity extends LocateActivity {
     private EditText tv_pollArea;
     @ViewInject(R.id.bridge2)
     private EditText bridge;
-    RxPopupViewManager mRxPopupViewManager;
-    private RxPopupImply popupImply;//提示  一小时后有惊喜
 
     //    @ViewInject(R.id.tv_bearing)
 //    private TextView tv_bearing;

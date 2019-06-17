@@ -20,6 +20,8 @@ import com.amap.api.location.AMapLocationListener;
 import com.amap.api.maps2d.AMap;
 import com.amap.api.maps2d.CameraUpdateFactory;
 import com.amap.api.maps2d.model.MyLocationStyle;
+import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.interfaces.OnSelectListener;
 import com.vondear.rxtool.view.RxToast;
 
 import org.xutils.x;
@@ -31,7 +33,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     public static final String ROOT_URL = "http://123.56.19.49/app/";
     public static final int POINT_TAKE_PHOTO = 21;
     public static final int REQUEST_SCREENSHOT = 41;
-
+    protected Context mContext;
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
@@ -41,6 +43,17 @@ public abstract class BaseActivity extends AppCompatActivity {
     public void log(Object str) {
         Log.e("debug_log", str.toString());
 
+    }
+   protected void initPop(final Context context, final View view, final String text) {
+        new XPopup.Builder(context)
+                .atView(view)
+                .asAttachList(new String[]{text}, new int[]{},
+                        new OnSelectListener() {
+                            @Override
+                            public void onSelect(int position, String text) {
+                            }
+                        })
+                .show();
     }
 //    public void start(Class<?> obj){
 //        Intent intent=new Intent(mContext,obj);

@@ -1,8 +1,6 @@
 package com.example.a98.transportdemo.record_road;
 
 import android.annotation.SuppressLint;
-import android.graphics.Color;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -32,15 +30,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.a98.transportdemo.util.Calculate.gen_angle;
-import static com.example.a98.transportdemo.util.Calculate.gen_area;
 import static com.example.a98.transportdemo.util.Calculate.gen_double_string;
 
 /**
  * AMapV2地图中简单介绍一些Marker的用法.
  */
-public class AngleActivity extends BaseActivity implements AMapLocationListener,AMap.OnMarkerDragListener {
+public class AngleActivity extends BaseActivity implements AMapLocationListener, AMap.OnMarkerDragListener {
     @ViewInject(R.id.btn_angle)
     private Button btn_angle;
+    @ViewInject(R.id.btn_add_point)
+    private Button btn_add_point;
     @ViewInject(R.id.tv_position)
     private TextView tv_position;
     @ViewInject(R.id.map)
@@ -49,27 +48,28 @@ public class AngleActivity extends BaseActivity implements AMapLocationListener,
     public AMapLocationClientOption option = new AMapLocationClientOption();
 
     private AMapLocationClient locationClient = null;
-    private  MyLocationStyle myLocationStyle;
-    private List<Marker> markers=new ArrayList<Marker>();
+    private MyLocationStyle myLocationStyle;
+    private List<Marker> markers = new ArrayList<Marker>();
     private MarkerOptions markerOption;
-    private  double angle=0.0;
+    private double angle = 0.0;
+    private LatLng current_positions;
+
     @SuppressLint("SetTextI18n")
     @Event(R.id.btn_cal_angle)
     private void cal_radius(View v) {
         try {
             List<LatLng> point_list = new ArrayList<>();
-            for(Marker m : markers) {
+            for (Marker m : markers) {
                 double lat = m.getPosition().latitude;
                 double lng = m.getPosition().longitude;
                 LatLng latLng = new LatLng(lat, lng);
                 point_list.add(latLng);
             }
             angle = gen_angle(point_list);
-            String p=gen_double_string(angle);
+            String p = gen_double_string(angle);
             btn_angle.setText(p);
             log(angle);
-        }
-        catch (Exception e ){
+        } catch (Exception e) {
             show_toast("计算失败,请正确操作定位!");
         }
 
@@ -77,6 +77,7 @@ public class AngleActivity extends BaseActivity implements AMapLocationListener,
 //        addMarkersToMap();
 
     }
+
     @Event(R.id.btn_clear_point)
     private void clear_pointw(View v) {
         if (aMap != null) {
@@ -87,24 +88,29 @@ public class AngleActivity extends BaseActivity implements AMapLocationListener,
             }
         }
     }
+
     @Event(R.id.btn_add_point)
     private void add_point(View v) {
-        log("正在获取位置...");
-        if(null != locationClient) {
-            //签到只需调用startLocation即可
-            locationClient.startLocation();
+        if (current_positions != null) {
+            addMarkersToMap(current_positions);
+            show_toast("添加点成功");
         }
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_angle);
         x.view().inject(this);
         mapView.onCreate(savedInstanceState); // 此方法必须重写
+        mContext=AngleActivity.this;
         initmap();
         initBlueP(aMap);
+        initPop(mContext,btn_add_point,"添加新点,长按红点后可拖动,最少需要四个点位");
+
     }
-    private void initmap(){
+
+    private void initmap() {
         if (aMap == null) {
             aMap = mapView.getMap();
         }
@@ -118,7 +124,8 @@ public class AngleActivity extends BaseActivity implements AMapLocationListener,
 
     }
 
-    
+
+
 
 
     /**
@@ -130,7 +137,7 @@ public class AngleActivity extends BaseActivity implements AMapLocationListener,
                 .position(latlng)
                 .draggable(true)
                 .visible(true);
-        Marker marker=aMap.addMarker(markerOption);
+        Marker marker = aMap.addMarker(markerOption);
         aMap.moveCamera(CameraUpdateFactory.changeLatLng(latlng));
         aMap.moveCamera(CameraUpdateFactory.zoomTo(16));
         markers.add(marker);
@@ -151,18 +158,18 @@ public class AngleActivity extends BaseActivity implements AMapLocationListener,
         String curDes = marker.getTitle() + "当前位置:(lat,lng)\n("
                 + marker.getPosition().latitude + ","
                 + marker.getPosition().longitude + ")";
-
+        addMarkersToMap(marker.getPosition());
     }
 
     @Override
     public void onLocationChanged(AMapLocation aMapLocation) {
-        if(aMapLocation.getErrorCode() == AMapLocation.LOCATION_SUCCESS) {
-            log("签到成功，签到经纬度：(" + aMapLocation.getLatitude() + "," + aMapLocation.getLongitude()+ ")");
+        if (aMapLocation.getErrorCode() == AMapLocation.LOCATION_SUCCESS) {
+            log("签到成功，签到经纬度：(" + aMapLocation.getLatitude() + "," + aMapLocation.getLongitude() + ")");
             String curDes = "当前位置:(纬度,经度)\n("
-                    + aMapLocation.getLatitude()+ ","
+                    + aMapLocation.getLatitude() + ","
                     + aMapLocation.getLongitude() + ")";
             tv_position.setText(curDes);
-
+            current_positions = new LatLng(aMapLocation.getLatitude(), aMapLocation.getLongitude());
 
         } else {
             //可以记录错误信息，或者根据错误错提示用户进行操作，Demo中只是打印日志
@@ -197,7 +204,7 @@ public class AngleActivity extends BaseActivity implements AMapLocationListener,
     protected void onDestroy() {
         super.onDestroy();
         mapView.onDestroy();
-        if(null != locationClient){
+        if (null != locationClient) {
             locationClient.onDestroy();
         }
 

@@ -1,27 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rl_activity_first"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/rl_activity_first"
-    android:background="@color/oldlace">
+    android:background="@color/oldlace"
+    android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/Layout1"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="5dp"
         android:gravity="left|center_horizontal"
         android:orientation="horizontal"
         android:paddingLeft="10dp"
         android:paddingTop="0dp"
-        android:paddingBottom="0dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:paddingBottom="0dp">
 
         <TextView
             android:layout_width="70dp"
@@ -48,19 +44,14 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/Layout2"
         android:layout_width="match_parent"
         android:layout_height="49dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="7dp"
         android:gravity="left|center_horizontal"
         android:orientation="horizontal"
         android:paddingLeft="10dp"
-        android:paddingTop="0dp"
-        android:paddingBottom="0dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Layout1">
+        android:paddingTop="1dp"
+        android:paddingBottom="0dp">
 
         <TextView
             android:layout_width="70dp"
@@ -85,59 +76,17 @@
             android:text="语音" />
     </LinearLayout>
 
-    <!--<LinearLayout-->
-        <!--android:id="@+id/Layout2"-->
-        <!--android:layout_width="406dp"-->
-        <!--android:layout_height="80dp"-->
-        <!--android:layout_marginTop="332dp"-->
-        <!--android:gravity="left|center_horizontal"-->
-        <!--android:orientation="horizontal"-->
-        <!--android:paddingLeft="10dp"-->
-        <!--android:paddingTop="0dp"-->
-        <!--android:paddingBottom="0dp"-->
-        <!--app:layout_constraintEnd_toEndOf="parent"-->
-        <!--app:layout_constraintHorizontal_bias="1.0"-->
-        <!--app:layout_constraintStart_toStartOf="parent"-->
-        <!--app:layout_constraintTop_toBottomOf="@+id/Layout1">-->
-
-        <!--<TextView-->
-            <!--android:id="@+id/tv_bearing"-->
-            <!--android:layout_width="88dp"-->
-            <!--android:layout_height="50dp"-->
-            <!--android:layout_marginLeft="10dp"-->
-            <!--android:text="实地拍照"-->
-            <!--android:textSize="20sp" />-->
-
-        <!--<ImageView-->
-            <!--android:id="@+id/take_photo"-->
-            <!--android:layout_width="80dp"-->
-            <!--android:layout_height="80dp"-->
-            <!--android:layout_marginBottom="284dp"-->
-            <!--android:clickable="true"-->
-            <!--android:focusable="true"-->
-            <!--app:layout_constraintBottom_toBottomOf="parent"-->
-            <!--app:layout_constraintEnd_toEndOf="parent"-->
-            <!--app:layout_constraintHorizontal_bias="0.108"-->
-            <!--app:layout_constraintStart_toStartOf="parent"-->
-            <!--app:srcCompat="@drawable/add" />-->
-
-    <!--</LinearLayout>-->
 
     <LinearLayout
-        android:id="@+id/Layout2"
         android:layout_width="match_parent"
         android:layout_height="50dp"
 
-        android:layout_marginTop="128dp"
+        android:layout_marginTop="7dp"
         android:gravity="left|center_horizontal"
         android:orientation="horizontal"
         android:paddingLeft="10dp"
         android:paddingTop="0dp"
-        android:paddingBottom="0dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Layout1">
+        android:paddingBottom="0dp">
 
         <TextView
             android:layout_width="120dp"
@@ -163,20 +112,15 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/Layout2"
         android:layout_width="match_parent"
         android:layout_height="50dp"
 
-        android:layout_marginTop="68dp"
+        android:layout_marginTop="7dp"
         android:gravity="left|center_horizontal"
         android:orientation="horizontal"
         android:paddingLeft="10dp"
         android:paddingTop="0dp"
-        android:paddingBottom="0dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Layout1">
+        android:paddingBottom="0dp">
 
         <TextView
             android:layout_width="70dp"
@@ -203,20 +147,14 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/Layout2"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-
-        android:layout_marginTop="196dp"
+        android:layout_marginTop="7dp"
         android:gravity="left|center_horizontal"
         android:orientation="horizontal"
         android:paddingLeft="10dp"
         android:paddingTop="0dp"
-        android:paddingBottom="0dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Layout1">
+        android:paddingBottom="0dp">
 
         <TextView
             android:layout_width="120dp"
@@ -245,23 +183,19 @@
         android:id="@+id/Layout2"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-
-        android:layout_marginTop="260dp"
+        android:layout_marginTop="7dp"
         android:gravity="left|center_horizontal"
         android:orientation="horizontal"
         android:paddingLeft="10dp"
         android:paddingTop="0dp"
-        android:paddingBottom="0dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Layout1">
+        android:paddingBottom="0dp">
 
         <TextView
             android:layout_width="120dp"
             android:layout_height="50dp"
             android:text="污染物面积："
             android:textSize="19sp" />
+
         <EditText
             android:id="@+id/tv_pollArea"
             android:layout_width="168dp"
@@ -274,30 +208,34 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/box_blue_record"
-            android:text="小"/>
+            android:text="小" />
+
         <Button
-            android:background="@drawable/ext_dev"
             android:id="@+id/btn_largeArea"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
-           />
+            android:background="@drawable/ext_dev"
+            android:textColor="@color/white" />
     </LinearLayout>
 
-        <Button
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center"
+        android:layout_marginTop="90dp"
+        android:layout_marginBottom="@dimen/dp_45"
+        android:gravity="center">
 
+        <Button
             android:id="@+id/button_submit"
             android:layout_width="350dp"
-            android:layout_height="40dp"
-            android:layout_marginBottom="84dp"
+            android:layout_height="45dp"
             android:background="@drawable/btn_round_green_disable"
             android:text="下一步"
             android:textColor="@color/white"
-            android:textSize="30sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.491"
-            app:layout_constraintStart_toStartOf="parent" />
+            android:textSize="30sp" />
+    </LinearLayout>
+
 
     <TextView
         android:id="@+id/bridge"
@@ -319,4 +257,4 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent" />
 
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>

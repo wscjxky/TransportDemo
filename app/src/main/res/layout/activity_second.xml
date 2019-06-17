@@ -33,9 +33,9 @@
     <GridView
         android:id="@+id/video_gridview"
         android:layout_width="match_parent"
-        android:layout_height="450dp"
-        android:gravity="center"
+        android:layout_height="381dp"
         android:layout_marginTop="@dimen/dp_30"
+        android:gravity="center"
         android:horizontalSpacing="5dp"
         android:numColumns="2"
         android:stretchMode="columnWidth"

@@ -1,18 +1,14 @@
 package com.example.a98.transportdemo.util;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.PersistableBundle;
-import android.support.annotation.Nullable;
 import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.VideoView;
 
 import com.example.a98.transportdemo.BaseActivity;
 import com.example.a98.transportdemo.MainActivity;
@@ -25,11 +21,8 @@ import com.vondear.rxtool.RxDeviceTool;
 import com.vondear.rxtool.RxNetTool;
 import com.vondear.rxtool.view.RxToast;
 import com.vondear.rxui.view.RxProgressBar;
-import com.vondear.rxui.view.RxRoundProgress;
-import com.vondear.rxui.view.dialog.RxDialog;
 import com.vondear.rxui.view.dialog.RxDialogLoading;
 import com.vondear.rxui.view.dialog.RxDialogSureCancel;
-
 
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
@@ -96,7 +89,9 @@ public class CheckVersionActivity extends BaseActivity {
                     if (!Objects.equals(version, result)) {
                         ShowDialog("您当前版本为-" + version + ", 发现新版本-" + result + "是否更新?");
                     } else {
-                        show_toast("您是最新的版本啦.");
+                        show_toast("您是最新的版本.");
+                        btn_enter_main.setText("最新版本,点击进入程序");
+
 
                     }
                 }
@@ -119,7 +114,7 @@ public class CheckVersionActivity extends BaseActivity {
             });
         } else {
             rxDialogLoading.cancel("网络错误,无法更新,请检查网络");
-            btn_enter_main.setText("更新失败,请下次重启更新");
+            btn_enter_main.setText("网络错误,请下次重启更新");
         }
 
     }
@@ -177,9 +172,9 @@ public class CheckVersionActivity extends BaseActivity {
                     @Override
                     public void onSuccess(Response<File> response) {
                         // file 即为文件数据，文件保存在指定目录
-                        RxToast.success("下载成功啦");
+                        RxToast.success("下载成功");
                         mRoundFlikerbar.finishLoad();
-                        btn_enter_main.setText( "更新完成,点击进入程序");
+                        btn_enter_main.setText("更新完成,点击进入程序");
                         btn_enter_main.setClickable(true);
 
                         Intent intent = new Intent(Intent.ACTION_VIEW);
@@ -205,7 +200,7 @@ public class CheckVersionActivity extends BaseActivity {
                     @Override
                     public void downloadProgress(Progress progress) {
                         super.downloadProgress(progress);
-                        float fraction = progress.fraction*100;
+                        float fraction = progress.fraction * 100;
                         BigDecimal b = new BigDecimal(fraction);
                         float f = b.setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
                         mRoundFlikerbar.setProgress(f);
