@@ -21,11 +21,11 @@
 
         <Button
             android:id="@+id/btn_enter_main"
-            style="@style/black_text"
+            style="@style/white_text"
             android:layout_width="231dp"
             android:layout_height="58dp"
             android:layout_gravity="center"
-            android:background="@drawable/btn_round_green_disable"
+            android:background="@color/colorAccent"
             android:clickable="false"
             android:text="正在更新..."
             tools:layout_editor_absoluteX="90dp"

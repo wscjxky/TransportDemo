@@ -1,37 +1,21 @@
 package com.example.a98.transportdemo.record_point;
 
-import android.Manifest;
-import android.app.ActionBar;
-import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.location.Location;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.a98.transportdemo.BaseActivity;
 import com.example.a98.transportdemo.R;
 import com.tencent.mm.opensdk.utils.Log;
 import com.vondear.camera.RxCameraView;
 import com.vondear.camera.tool.RxCameraTool;
 import com.vondear.rxtool.RxBarTool;
-import com.vondear.rxtool.RxFileTool;
 import com.vondear.rxtool.RxLocationTool;
-import com.vondear.rxtool.RxTimeTool;
 import com.vondear.rxtool.RxTool;
-import com.vondear.rxtool.interfaces.OnRxCamera;
 import com.vondear.rxtool.view.RxToast;
 import com.vondear.rxui.activity.ActivityBaseLocation;
 import com.vondear.rxui.view.dialog.RxDialogScaleView;
@@ -41,15 +25,11 @@ import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Random;
 
 import static android.view.View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
 import static android.view.View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION;
-import static com.example.a98.transportdemo.BaseActivity.POINT_TAKE_PHOTO;
-import static com.example.a98.transportdemo.BaseActivity.REQUEST_LARGE_AREA_ACTIVITY;
 
 public class TakePhotoActivity extends ActivityBaseLocation {
 

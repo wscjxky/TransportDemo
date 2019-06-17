@@ -230,7 +230,7 @@
             android:id="@+id/button_submit"
             android:layout_width="350dp"
             android:layout_height="45dp"
-            android:background="@drawable/btn_round_green_disable"
+            android:background="@color/colorAccent"
             android:text="下一步"
             android:textColor="@color/white"
             android:textSize="30sp" />

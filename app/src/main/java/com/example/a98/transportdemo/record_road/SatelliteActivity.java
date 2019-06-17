@@ -27,6 +27,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.example.a98.transportdemo.BaseActivity;
 import com.example.a98.transportdemo.R;
+import com.example.a98.transportdemo.util.CustomImageViewerPopup;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.interfaces.XPopupImageLoader;
 import com.tarek360.instacapture.Instacapture;
@@ -72,9 +73,12 @@ public class SatelliteActivity extends BaseActivity implements AMapLocationListe
                 Uri uri = RxPhotoTool.createImagePathUri(mContext);
                 String filename = RxPhotoTool.getRealFilePath(mContext, uri);
                 writePngFile(filename, bitmap);
+                CustomImageViewerPopup viewerPopup = new CustomImageViewerPopup(mContext);
+//自定义的ImageViewer弹窗需要自己手动设置相应的属性，必须设置的有srcView，url和imageLoader。
+                viewerPopup.setSingleSrcView(iv_statellite_screenshot, uri);
+                viewerPopup.setXPopupImageLoader(new ImageLoader());
                 new XPopup.Builder(mContext)
-                        .asImageViewer(iv_statellite_screenshot, uri, new ImageLoader())
-
+                        .asCustom(viewerPopup)
                         .show();
                 show_toast("截图成功,点击退出浏览,保存地址" +filename);
 

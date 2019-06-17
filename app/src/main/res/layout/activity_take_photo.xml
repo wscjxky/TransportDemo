@@ -44,6 +44,7 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:gravity="center"
+            style="@style/white_text"
             android:text="状态"/>
 
         <TextView
@@ -52,17 +53,21 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="22dp"
             android:layout_marginLeft="8dp"
+            style="@style/white_text"
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
             android:gravity="center"
             android:text="GPS"/>
 
         <Button
+            android:background="@color/colorAccent"
             android:id="@+id/btn_take_camera"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/dp_250"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
+            android:layout_marginBottom="@dimen/dp_28"
+            style="@style/white_text"
             android:text="拍照并记录当前经纬度信息"/>
     </LinearLayout>
 

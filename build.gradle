@@ -7,6 +7,7 @@ buildscript {
         jcenter()
         mavenCentral()
         mavenLocal()
+        maven { url 'https://maven.google.com' }
         maven { url "https://jitpack.io" }
         maven { url 'https://esri.bintray.com/arcgis' }
 

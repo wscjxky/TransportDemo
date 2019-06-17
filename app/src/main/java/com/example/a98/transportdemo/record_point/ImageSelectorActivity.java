@@ -1,25 +1,23 @@
 package com.example.a98.transportdemo.record_point;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.provider.MediaStore;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.a98.transportdemo.BaseActivity;
-import com.example.a98.transportdemo.MainActivity;
 import com.example.a98.transportdemo.R;
+import com.example.a98.transportdemo.data.ImageListAdapter;
+import com.example.a98.transportdemo.record_road.SatelliteActivity;
+import com.lxj.xpopup.XPopup;
 import com.yongchun.library.adapter.ImageFolderAdapter;
-import com.yongchun.library.adapter.ImageListAdapter;
 import com.yongchun.library.model.LocalMedia;
 import com.yongchun.library.model.LocalMediaFolder;
 import com.yongchun.library.utils.FileUtils;
@@ -34,12 +32,10 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.a98.transportdemo.BaseActivity.POINT_TAKE_PHOTO;
 
 public class ImageSelectorActivity extends BaseActivity {
     public final static int REQUEST_IMAGE = 66;
     public final static int REQUEST_CAMERA = 67;
-
     public final static String BUNDLE_CAMERA_PATH = "CameraPath";
 
     public final static String REQUEST_OUTPUT = "outputList";
@@ -84,7 +80,7 @@ public class ImageSelectorActivity extends BaseActivity {
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
         builder.detectFileUriExposure();
-
+        mContext=ImageSelectorActivity.this;
         maxSelectNum = getIntent().getIntExtra(EXTRA_MAX_SELECT_NUM, 9);
         selectMode = getIntent().getIntExtra(EXTRA_SELECT_MODE, MODE_MULTIPLE);
         showCamera = getIntent().getBooleanExtra(EXTRA_SHOW_CAMERA, true);
@@ -176,15 +172,16 @@ public class ImageSelectorActivity extends BaseActivity {
             }
 
             @Override
-            public void onPictureClick(LocalMedia media, int position) {
+            public void onPictureClick(ImageView imageView, LocalMedia media, int position) {
                 if (enablePreview) {
-                    startPreview(imageAdapter.getImages(), position);
+                    startPreview(imageView,imageAdapter.getImages(), position);
                 } else if (enableCrop) {
 //                    startCrop(media.getPath());
                 } else {
                     onSelectDone(media.getPath());
                 }
             }
+
         });
         doneText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -205,12 +202,7 @@ public class ImageSelectorActivity extends BaseActivity {
                 folderName.setText(name);
             }
         });
-        previewText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startPreview(imageAdapter.getSelectedImages(), 0);
-            }
-        });
+
     }
 
 
@@ -278,8 +270,12 @@ public class ImageSelectorActivity extends BaseActivity {
         startActivityForResult(intent, POINT_TAKE_PHOTO);
     }
 
-    public void startPreview(List<LocalMedia> previewImages, int position) {
-        ImagePreviewActivity.startPreview(this, previewImages, imageAdapter.getSelectedImages(), maxSelectNum, position);
+    public void startPreview(ImageView imageView,List<LocalMedia> previewImages, int position) {
+        log(imageView.toString());
+        new XPopup.Builder(mContext)
+                .asImageViewer(imageView, previewImages.get(position).getPath(), new SatelliteActivity.ImageLoader())
+
+                .show();
     }
 
     public void startCrop(String path) {
