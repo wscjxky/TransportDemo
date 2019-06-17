@@ -23,8 +23,15 @@ import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationClientOption.AMapLocationMode;
 import com.amap.api.location.AMapLocationListener;
-import com.amap.api.maps.model.BitmapDescriptorFactory;
-import com.amap.api.maps.model.MarkerOptions;
+import  com.amap.api.maps.model.BitmapDescriptorFactory;
+import  com.amap.api.maps.model.LatLng;
+import  com.amap.api.maps.model.MarkerOptions;
+
+import com.amap.api.maps.model.LatLng;
+import com.amap.api.maps.model.Marker;
+import com.amap.api.maps.model.PolygonOptions;
+import com.amap.api.maps.model.Polyline;
+import com.amap.api.maps.model.PolylineOptions;
 import com.amap.api.trace.LBSTraceClient;
 import com.amap.api.trace.TraceListener;
 import com.amap.api.trace.TraceLocation;
@@ -42,6 +49,7 @@ import org.xutils.x;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -56,11 +64,8 @@ public class AreaActivity extends BaseActivity implements com.amap.api.maps.Loca
     private OnLocationChangedListener mListener;
     private AMapLocationClient mLocationClient;
     private AMapLocationClientOption mLocationOption;
-    private com.amap.api.maps.model.PolylineOptions mPolyoptions, tracePolytion;
-    private com.amap.api.maps.model.PolylineOptions rectPolyoptions;
-    private com.amap.api.maps.model.Polyline rectpPolyline;
-
-    private com.amap.api.maps.model.Polyline mpolyline;
+    private PolylineOptions mPolyoptions, tracePolytion;
+    private Polyline mpolyline;
     private PathRecord record;
     private long mStartTime;
     private long mEndTime;
@@ -69,9 +74,9 @@ public class AreaActivity extends BaseActivity implements com.amap.api.maps.Loca
     private List<AMapLocation> recordList = new ArrayList<AMapLocation>();
     private int tracesize = 30;
     private int mDistance = 0;
-    private com.amap.api.maps.model.LatLng currentLatLng;
+    private  LatLng currentLatLng;
     private TextView mResultShow;
-    private com.amap.api.maps.model.Marker mlocMarker;
+    private Marker mlocMarker;
     @ViewInject(R.id.tv_level)
     private TextView tv_level;
     @ViewInject(R.id.map)
@@ -108,8 +113,11 @@ public class AreaActivity extends BaseActivity implements com.amap.api.maps.Loca
     };
 
     private TraceOverlay mTraceoverlay;
-    private com.amap.api.maps.model.LatLng leftTopLatlng;
-    private com.amap.api.maps.model.LatLng rightBottomLatlng;
+    private  LatLng leftTopLatlng;
+    private  LatLng rightTopLatlng;
+    private  LatLng leftBottomLatlng;
+
+    private  LatLng rightBottomLatlng;
     private double area = 0.0;
 
     @Event(R.id.btn_finish)
@@ -120,7 +128,7 @@ public class AreaActivity extends BaseActivity implements com.amap.api.maps.Loca
             Intent intent = getIntent();
             DecimalFormat decimalFormat = new DecimalFormat(".00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
             String p = decimalFormat.format(area);//format 返回的是字符串
-            intent.putExtra("area", area);
+            intent.putExtra("area", p);
             setResult(REQUEST_LARGE_AREA_ACTIVITY, intent);
             finish();
         } catch (Exception e) {
@@ -133,55 +141,57 @@ public class AreaActivity extends BaseActivity implements com.amap.api.maps.Loca
 
     }
 
-    private List<com.amap.api.maps.model.LatLng> createRectangle(com.amap.api.maps.model.LatLng center, double halfWidth,
-                                                                 double halfHeight) {
-        List<com.amap.api.maps.model.LatLng> latLngs = new ArrayList<com.amap.api.maps.model.LatLng>();
-        latLngs.add(new com.amap.api.maps.model.LatLng(center.latitude - halfHeight, center.longitude - halfWidth));
-        latLngs.add(new com.amap.api.maps.model.LatLng(center.latitude - halfHeight, center.longitude + halfWidth));
-        latLngs.add(new com.amap.api.maps.model.LatLng(center.latitude + halfHeight, center.longitude + halfWidth));
-        latLngs.add(new com.amap.api.maps.model.LatLng(center.latitude + halfHeight, center.longitude - halfWidth));
+    private List<LatLng> createRectangle(LatLng center, double halfWidth,
+                                         double halfHeight) {
+        List< LatLng> latLngs = new ArrayList< LatLng>();
+        latLngs.add(new  LatLng(center.latitude - halfHeight, center.longitude - halfWidth));
+        latLngs.add(new  LatLng(center.latitude - halfHeight, center.longitude + halfWidth));
+        latLngs.add(new  LatLng(center.latitude + halfHeight, center.longitude + halfWidth));
+        latLngs.add(new  LatLng(center.latitude + halfHeight, center.longitude - halfWidth));
         return latLngs;
     }
 
     private void set_rect() {
         try {
 
-//            ArrayList<Double> lat_list = new ArrayList<Double>();
-//            ArrayList<Double> lng_list = new ArrayList<Double>();
+            ArrayList<Double> lat_list = new ArrayList<>();
+            ArrayList<Double> lng_list = new ArrayList<>();
             List<com.amap.api.maps2d.model.LatLng> point_list = new ArrayList<>();
             List<AMapLocation> pathline = record.getPathline();
             for (AMapLocation point : pathline) {//其内部实质上还是调用了迭代器遍历方式，这种循环方式还有其他限制，不建议使用。
                 double lat = point.getLatitude();
                 double lng = point.getLongitude();
                 com.amap.api.maps2d.model.LatLng latLng = new com.amap.api.maps2d.model.LatLng(lat, lng);
+                lat_list.add(lat);
+                lng_list.add(lng);
                 point_list.add(latLng);
             }
             area = gen_area(point_list);
 
-//            //        最大经度
-//            double right = Collections.max(lat_list);
-//            double left = Collections.min(lat_list);
-//            //        最大纬度
-//            double top = Collections.max(lng_list);
-//            double bottom = Collections.min(lng_list);
-//            double right = 116.345686;
+            //        最大经度
+            double right = Collections.max(lat_list);
+            double left = Collections.min(lat_list);
+////            //        最大纬度
+            double top = Collections.max(lng_list);
+            double bottom = Collections.min(lng_list);
+//            double right = 116.341686;
 //            double left = 116.341749;
-//            double top = 39.951901;
+//            double top = 39.950101;
 //            double bottom = 39.950076;
-//            leftTopLatlng = new LatLng(top, left);
-//            rightBottomLatlng = new LatLng(bottom, right);
+            leftTopLatlng = new LatLng(top, left);
+            rightBottomLatlng = new LatLng(bottom, right);
+            leftBottomLatlng = new LatLng(bottom, left);
+            rightTopLatlng = new LatLng(top, right);
 
-            mAMap.addPolygon(new com.amap.api.maps.model.PolygonOptions()
-                    .addAll(createRectangle(currentLatLng, 0.00012, 0.00009))
+            ArrayList<LatLng> rect = new ArrayList<>();
+            rect.add(leftTopLatlng);rect.add(leftBottomLatlng);rect.add(rightTopLatlng);rect.add(rightBottomLatlng);
+            log(rect);
+            mAMap.addPolygon(new PolygonOptions().addAll(rect)
                     .strokeColor(Color.RED)
                     .fillColor(Color.argb(10, 255, 0, 0))
                     .strokeWidth(8));
-
-//            rectPolyoptions.add(leftTopLatlng, new LatLng(bottom, left), new LatLng(top, right), rightBottomLatlng);
-//            rectpPolyline = mAMap.addPolyline(rectPolyoptions);
-//            log(rectPolyoptions.toString());
         } catch (Exception e) {
-            log(e.getMessage());
+            log(e);
 
         }
     }
@@ -220,8 +230,7 @@ public class AreaActivity extends BaseActivity implements com.amap.api.maps.Loca
                     mEndTime = System.currentTimeMillis();
 //                    mOverlayList.add(mTraceoverlay);
                     DecimalFormat decimalFormat = new DecimalFormat("0.0");
-                    mResultShow.setText(
-                            decimalFormat.format(getTotalDistance() / 1000d) + "KM");
+                    mResultShow.setText(decimalFormat.format(getTotalDistance() / 1000d) + "KM");
                     LBSTraceClient mTraceClient = new LBSTraceClient(getApplicationContext());
                     mTraceClient.queryProcessedTrace(2, Util.parseTraceLocationList(record.getPathline()),
                             LBSTraceClient.TYPE_AMAP, AreaActivity.this);
@@ -280,9 +289,9 @@ public class AreaActivity extends BaseActivity implements com.amap.api.maps.Loca
         for (int i = 0; i < list.size() - 1; i++) {
             AMapLocation firstpoint = list.get(i);
             AMapLocation secondpoint = list.get(i + 1);
-            com.amap.api.maps.model.LatLng firstLatLng = new com.amap.api.maps.model.LatLng(firstpoint.getLatitude(),
+             LatLng firstLatLng = new  LatLng(firstpoint.getLatitude(),
                     firstpoint.getLongitude());
-            com.amap.api.maps.model.LatLng secondLatLng = new com.amap.api.maps.model.LatLng(secondpoint.getLatitude(),
+             LatLng secondLatLng = new  LatLng(secondpoint.getLatitude(),
                     secondpoint.getLongitude());
             double betweenDis = com.amap.api.maps.AMapUtils.calculateLineDistance(firstLatLng,
                     secondLatLng);
@@ -319,16 +328,13 @@ public class AreaActivity extends BaseActivity implements com.amap.api.maps.Loca
     }
 
     private void initpolyline() {
-        mPolyoptions = new com.amap.api.maps.model.PolylineOptions();
+        mPolyoptions = new  PolylineOptions();
         mPolyoptions.width(8f);
         mPolyoptions.color(Color.GRAY);
-        rectPolyoptions = new com.amap.api.maps.model.PolylineOptions();
-        rectPolyoptions.width(13f);
-        rectPolyoptions.color(Color.RED);
 
-        tracePolytion = new com.amap.api.maps.model.PolylineOptions();
+        tracePolytion = new  PolylineOptions();
         tracePolytion.width(40);
-        tracePolytion.setCustomTexture(com.amap.api.maps.model.BitmapDescriptorFactory.fromResource(R.drawable.grasp_trace_line));
+        tracePolytion.setCustomTexture( BitmapDescriptorFactory.fromResource(R.drawable.grasp_trace_line));
 
     }
 
@@ -355,7 +361,7 @@ public class AreaActivity extends BaseActivity implements com.amap.api.maps.Loca
         if (mListener != null && amapLocation != null) {
             if (amapLocation != null && amapLocation.getErrorCode() == 0) {
                 mListener.onLocationChanged(amapLocation);// 显示系统小蓝点
-                com.amap.api.maps.model.LatLng mylocation = new com.amap.api.maps.model.LatLng(amapLocation.getLatitude(),
+                 LatLng mylocation = new  LatLng(amapLocation.getLatitude(),
                         amapLocation.getLongitude());
                 mAMap.moveCamera(com.amap.api.maps.CameraUpdateFactory.changeLatLng(mylocation));
                 if (btn.isChecked()) {
@@ -444,7 +450,7 @@ public class AreaActivity extends BaseActivity implements com.amap.api.maps.Loca
     }
 
     @Override
-    public void onTraceProcessing(int i, int i1, List<com.amap.api.maps.model.LatLng> list) {
+    public void onTraceProcessing(int i, int i1, List< LatLng> list) {
 
     }
 
@@ -457,7 +463,7 @@ public class AreaActivity extends BaseActivity implements com.amap.api.maps.Loca
      * @param waitingtime 等待时间
      */
     @Override
-    public void onFinished(int lineID, List<com.amap.api.maps.model.LatLng> linepoints, int distance, int waitingtime) {
+    public void onFinished(int lineID, List< LatLng> linepoints, int distance, int waitingtime) {
         if (lineID == 1) {
             if (linepoints != null && linepoints.size() > 0) {
                 mTraceoverlay.add(linepoints);

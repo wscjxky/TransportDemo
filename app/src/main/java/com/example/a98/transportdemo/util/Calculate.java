@@ -99,7 +99,6 @@ public class Calculate {
             S += 0.5*(point_list.get(i).latitude * point_list.get((i+1)%point_list.size()).longitude - point_list.get(i).longitude * point_list.get((i+1)%point_list.size()).latitude);
         }
         S = abs(S)*K;
-        System.out.println(S);
         return S;
     }
     public static String gen_double_string(Double d){

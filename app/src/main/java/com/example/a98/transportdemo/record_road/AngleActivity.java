@@ -56,17 +56,24 @@ public class AngleActivity extends BaseActivity implements AMapLocationListener,
     @SuppressLint("SetTextI18n")
     @Event(R.id.btn_cal_angle)
     private void cal_radius(View v) {
-        List<LatLng> point_list = new ArrayList<>();
-        for(Marker m : markers) {
+        try {
+            List<LatLng> point_list = new ArrayList<>();
+            for(Marker m : markers) {
                 double lat = m.getPosition().latitude;
                 double lng = m.getPosition().longitude;
                 LatLng latLng = new LatLng(lat, lng);
                 point_list.add(latLng);
             }
             angle = gen_angle(point_list);
-        String p=gen_double_string(angle);
-        btn_angle.setText(p);
-        log(angle);
+            String p=gen_double_string(angle);
+            btn_angle.setText(p);
+            log(angle);
+        }
+        catch (Exception e ){
+            show_toast("计算失败,请正确操作定位!");
+        }
+
+
 //        addMarkersToMap();
 
     }

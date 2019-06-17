@@ -61,22 +61,28 @@ public class RadiusActivity extends BaseActivity implements AMapLocationListener
     private LatLng latlng = new LatLng(39.761, 116.434);
     @Event(R.id.btn_cal_radius)
     private void cal_radius(View v) {
-        List<LatLng> point_list = new ArrayList<>();
-        for(Marker m : markers) {
-            double lat = m.getPosition().latitude;
-            double lng = m.getPosition().longitude;
-            LatLng latLng = new LatLng(lat, lng);
-            point_list.add(latLng);
-        }
-        circle_point = gen_circle(point_list);
+        try {
+            List<LatLng> point_list = new ArrayList<>();
+            for(Marker m : markers) {
+                double lat = m.getPosition().latitude;
+                double lng = m.getPosition().longitude;
+                LatLng latLng = new LatLng(lat, lng);
+                point_list.add(latLng);
+            }
+            circle_point = gen_circle(point_list);
 //        circle_radius = gen_radius(point_list);
-        addMarkersToMap(circle_point);
-        log(circle_radius);
+            addMarkersToMap(circle_point);
+            log(circle_radius);
 
-        circle_radius = AMapUtils.calculateLineDistance(circle_point, markers.get(0).getPosition());
-        double c = circle_radius;
-        String p=gen_double_string(c);
-        tv_radius.setText(p);
+            circle_radius = AMapUtils.calculateLineDistance(circle_point, markers.get(0).getPosition());
+            double c = circle_radius;
+            String p=gen_double_string(c);
+            tv_radius.setText(p);
+        }
+        catch (Exception e ){
+            show_toast("计算失败,请正确操作定位!");
+        }
+
     }
     @Event(R.id.btn_clear_point)
     private void clear_pointw(View v) {

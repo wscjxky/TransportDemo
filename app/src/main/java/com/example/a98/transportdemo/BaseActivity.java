@@ -30,6 +30,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     public static final int REQUEST_SHARE = 30;
     public static final String ROOT_URL = "http://123.56.19.49/app/";
     public static final int POINT_TAKE_PHOTO = 21;
+    public static final int REQUEST_SCREENSHOT = 41;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
@@ -57,10 +58,16 @@ public class AltitudeActivity extends ActivityBaseLocation implements AMapLocati
 
     @Event(R.id.btn_cal_altitude)
     private void cal(View v) {
-        Double alt = (end_altitiude - start_altitiude);
-        String p = gen_double_string(alt);
-        tv_res_altitude.setText(p);
-        RxToast.showToast("计算结果" + String.valueOf(end_altitiude - start_altitiude));
+        try {
+            Double alt = (end_altitiude - start_altitiude);
+            String p = gen_double_string(alt);
+            tv_res_altitude.setText(p);
+            RxToast.showToast("计算结果" + String.valueOf(end_altitiude - start_altitiude));
+        }
+        catch (Exception e ){
+            RxToast.error("计算失败,请正确操作定位!");
+        }
+
     }
 
     @Event(R.id.btn_clear_point)
