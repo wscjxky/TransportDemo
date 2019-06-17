@@ -75,5 +75,7 @@ dependencies {
     implementation 'com.lxj:xpopup:1.8.0'
 //for androidx.
     implementation 'com.lxj:xpopup:1.8.0-x'
+    compile 'com.lzy.net:okgo:3.0.4'
+
 
 }

@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.a98.transportdemo.BaseActivity;
+import com.example.a98.transportdemo.MainActivity;
 import com.example.a98.transportdemo.R;
 import com.yongchun.library.adapter.ImageFolderAdapter;
 import com.yongchun.library.adapter.ImageListAdapter;
@@ -217,7 +218,9 @@ public class ImageSelectorActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
             if (requestCode == REQUEST_SHARE) {
-                start(FinishActivity.class);
+                Intent intent = new Intent(ImageSelectorActivity.this, FinishActivity.class);
+                startActivity(intent);
+                finish();
             }
             // on take photo success
             if (requestCode == POINT_TAKE_PHOTO) {

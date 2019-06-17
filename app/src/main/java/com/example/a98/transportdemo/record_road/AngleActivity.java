@@ -1,6 +1,8 @@
 package com.example.a98.transportdemo.record_road;
 
 import android.annotation.SuppressLint;
+import android.graphics.Color;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -40,10 +42,12 @@ public class AngleActivity extends BaseActivity implements AMapLocationListener,
     @ViewInject(R.id.btn_angle)
     private Button btn_angle;
     @ViewInject(R.id.tv_position)
-    private Button tv_position;
+    private TextView tv_position;
     @ViewInject(R.id.map)
     private MapView mapView;
     private AMap aMap;
+    public AMapLocationClientOption option = new AMapLocationClientOption();
+
     private AMapLocationClient locationClient = null;
     private  MyLocationStyle myLocationStyle;
     private List<Marker> markers=new ArrayList<Marker>();
@@ -61,7 +65,7 @@ public class AngleActivity extends BaseActivity implements AMapLocationListener,
             }
             angle = gen_angle(point_list);
         String p=gen_double_string(angle);
-        tv_position.setText(p);
+        btn_angle.setText(p);
         log(angle);
 //        addMarkersToMap();
 
@@ -91,31 +95,22 @@ public class AngleActivity extends BaseActivity implements AMapLocationListener,
         x.view().inject(this);
         mapView.onCreate(savedInstanceState); // 此方法必须重写
         initmap();
-        initBlueP();
+        initBlueP(aMap);
     }
     private void initmap(){
         if (aMap == null) {
             aMap = mapView.getMap();
         }
         locationClient = new AMapLocationClient(this);
-        AMapLocationClientOption option = new AMapLocationClientOption();
-        option.setLocationPurpose(AMapLocationClientOption.AMapLocationPurpose.SignIn);
+        option.setLocationPurpose(AMapLocationClientOption.AMapLocationPurpose.Sport);
         locationClient.setLocationOption(option);
         //设置定位监听
+
         locationClient.setLocationListener(this);
+        locationClient.startLocation();
 
     }
-    private void initBlueP(){
-        aMap.setMyLocationStyle(myLocationStyle);//设置定位蓝点的Style
-        myLocationStyle = new MyLocationStyle();//初始化定位蓝点样式类
-        myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_FOLLOW);//连续定位、且将视角移动到地图中心点，定位点依照设备方向旋转，并且会跟随设备移动。（1秒1次定位）默认执行此种模式。
-        myLocationStyle.interval(2000); //设置连续定位模式下的定位间隔，只在连续定位模式下生效，单次定位模式下不会生效。单位为毫秒。
-        aMap.setMyLocationStyle(myLocationStyle);//设置定位蓝点的Style
-        aMap.getUiSettings().setMyLocationButtonEnabled(true);
-        aMap.setMyLocationEnabled(true);// 设置为true表示启动显示定位蓝点，false表示隐藏定位蓝点并不进行定位，默认是false。
-        aMap.moveCamera(CameraUpdateFactory.zoomTo(18));
 
-    }
     
 
 
@@ -149,21 +144,25 @@ public class AngleActivity extends BaseActivity implements AMapLocationListener,
         String curDes = marker.getTitle() + "当前位置:(lat,lng)\n("
                 + marker.getPosition().latitude + ","
                 + marker.getPosition().longitude + ")";
-        tv_position.setText(curDes);
+
     }
 
     @Override
     public void onLocationChanged(AMapLocation aMapLocation) {
         if(aMapLocation.getErrorCode() == AMapLocation.LOCATION_SUCCESS) {
             log("签到成功，签到经纬度：(" + aMapLocation.getLatitude() + "," + aMapLocation.getLongitude()+ ")");
-            addMarkersToMap(new LatLng(aMapLocation.getLatitude(),aMapLocation.getLongitude()));
+            String curDes = "当前位置:(纬度,经度)\n("
+                    + aMapLocation.getLatitude()+ ","
+                    + aMapLocation.getLongitude() + ")";
+            tv_position.setText(curDes);
+
 
         } else {
             //可以记录错误信息，或者根据错误错提示用户进行操作，Demo中只是打印日志
             Log.e("AMap", "签到定位失败，错误码：" + aMapLocation.getErrorCode() + ", " + aMapLocation.getLocationDetail());
-            //提示错误信息
-            log("签到失败");
         }
+
+
     }
 
     @Override

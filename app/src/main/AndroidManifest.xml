@@ -23,9 +23,9 @@
 
         <activity android:name=".BaseActivity" />
         <activity android:name=".LocateActivity" />
-        <activity android:name=".util.CheckVersionActivity" />
+        <activity android:name=".MainActivity" />
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".util.CheckVersionActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -53,9 +53,20 @@
         <activity android:name=".locate.RecordActivity" />
         <activity android:name=".locate.RecordShowActivity" />
 
+        <!--<provider-->
+            <!--android:name="android.support.v4.content.FileProvider"-->
+            <!--android:authorities="com.example.cameraalbumtest.fileprovider"-->
+            <!--android:exported="false"-->
+            <!--android:grantUriPermissions="true"-->
+            <!--tools:replace="android:authorities">-->
+            <!--<meta-data-->
+                <!--android:name="android.support.FILE_PROVIDER_PATHS"-->
+                <!--android:resource="@xml/file_paths" />-->
+        <!--</provider>-->
+
         <provider
             android:name="android.support.v4.content.FileProvider"
-            android:authorities="com.example.cameraalbumtest.fileprovider"
+            android:authorities="com.example.a98.transportdemo.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true"
             tools:replace="android:authorities">
@@ -63,7 +74,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-
     </application>
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />

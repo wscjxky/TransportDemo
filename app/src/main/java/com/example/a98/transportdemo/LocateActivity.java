@@ -70,7 +70,7 @@ public class LocateActivity  extends BaseActivity {
         mLocationClient = new AMapLocationClient(this);
         mLocationClient.setLocationListener(mLocationListener);
         mLocationOption = new AMapLocationClientOption();
-        mLocationOption.setLocationPurpose(AMapLocationClientOption.AMapLocationPurpose.SignIn);
+        mLocationOption.setLocationPurpose(AMapLocationClientOption.AMapLocationPurpose.Sport);
         mLocationClient.setLocationOption(mLocationOption);
     }
     /**

@@ -1,11 +1,14 @@
 package com.example.a98.transportdemo.record_road;
 
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.media.projection.MediaProjectionManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.amap.api.location.AMapLocation;
@@ -15,6 +18,7 @@ import com.amap.api.location.AMapLocationListener;
 import com.amap.api.maps2d.AMap;
 import com.amap.api.maps2d.CameraUpdateFactory;
 import com.amap.api.maps2d.MapView;
+import com.amap.api.maps2d.model.LatLng;
 import com.amap.api.maps2d.model.MyLocationStyle;
 import com.example.a98.transportdemo.BaseActivity;
 import com.example.a98.transportdemo.R;
@@ -24,11 +28,16 @@ import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
+import java.text.DecimalFormat;
+
 @ContentView(R.layout.activity_statellite)
 
 public class SatelliteActivity extends BaseActivity implements AMapLocationListener {
     @ViewInject(R.id.map)
     private MapView mapView;
+    @ViewInject(R.id.tv_position)
+    private TextView tv_position;
+
     private AMapLocationClient locationClient = null;
     private AMap aMap;
     private  MyLocationStyle myLocationStyle;
@@ -58,7 +67,7 @@ public class SatelliteActivity extends BaseActivity implements AMapLocationListe
         x.view().inject(this);
         mapView.onCreate(savedInstanceState); // 此方法必须重写
         initmap();
-        initBlueP();
+        initBlueP(aMap);
 
     }
     private void initmap(){
@@ -68,9 +77,10 @@ public class SatelliteActivity extends BaseActivity implements AMapLocationListe
         }
         locationClient = new AMapLocationClient(this);
         AMapLocationClientOption option = new AMapLocationClientOption();
-        option.setLocationPurpose(AMapLocationClientOption.AMapLocationPurpose.SignIn);
+        option.setLocationPurpose(AMapLocationClientOption.AMapLocationPurpose.Sport);
         locationClient.setLocationOption(option);
         locationClient.setLocationListener( this);
+        locationClient.startLocation();
 
 
     }
@@ -78,17 +88,16 @@ public class SatelliteActivity extends BaseActivity implements AMapLocationListe
 
     @Override
     public void onLocationChanged(AMapLocation aMapLocation) {
-
-    }
-    private void initBlueP(){
-        aMap.setMyLocationStyle(myLocationStyle);//设置定位蓝点的Style
-        myLocationStyle = new MyLocationStyle();//初始化定位蓝点样式类
-        myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_FOLLOW);//连续定位、且将视角移动到地图中心点，定位点依照设备方向旋转，并且会跟随设备移动。（1秒1次定位）默认执行此种模式。
-        myLocationStyle.interval(2000); //设置连续定位模式下的定位间隔，只在连续定位模式下生效，单次定位模式下不会生效。单位为毫秒。
-        aMap.setMyLocationStyle(myLocationStyle);//设置定位蓝点的Style
-        aMap.getUiSettings().setMyLocationButtonEnabled(true);
-        aMap.setMyLocationEnabled(true);// 设置为true表示启动显示定位蓝点，false表示隐藏定位蓝点并不进行定位，默认是false。
-        aMap.moveCamera(CameraUpdateFactory.zoomTo(18));
-
+        if(aMapLocation.getErrorCode() == AMapLocation.LOCATION_SUCCESS) {
+            log("签到成功，签到经纬度：(" + aMapLocation.getLatitude() + "," + aMapLocation.getLongitude()+ ")");
+            String curDes = "当前位置:(纬度,经度)\n("
+                    + aMapLocation.getLatitude()+ ","
+                    + aMapLocation.getLongitude() + ")";
+            tv_position.setText(curDes);
+        } else {
+            //可以记录错误信息，或者根据错误错提示用户进行操作，Demo中只是打印日志
+            Log.e("AMap", "签到定位失败，错误码：" + aMapLocation.getErrorCode() + ", " + aMapLocation.getLocationDetail());
+            //提示错误信息
+        }
     }
 }

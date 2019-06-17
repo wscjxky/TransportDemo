@@ -1,9 +1,11 @@
 package com.example.a98.transportdemo.record_road;
 
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.amap.api.location.AMapLocation;
@@ -39,22 +41,24 @@ public class AltitudeActivity extends ActivityBaseLocation implements AMapLocati
     private TextView tv_gps_info;
     @ViewInject(R.id.tv_res_altitude)
     private TextView tv_res_altitude;
-
     @ViewInject(R.id.tv_start_altitude)
     private TextView tv_start_altitude;
     @ViewInject(R.id.map)
     private MapView mapView;
     @ViewInject(R.id.tv_end_altitude)
     private TextView tv_end_altitude;
+    @ViewInject(R.id.btn_record_end_point)
+    private Button btn_record_end_point;
     public double start_altitiude = 0;
     private AMap aMap;
     private AMapLocationClient locationClient = null;
     public double end_altitiude = 0;
+    public String curr_altitude = "0.00";
 
     @Event(R.id.btn_cal_altitude)
     private void cal(View v) {
-        Double alt=(end_altitiude - start_altitiude);
-        String p=gen_double_string(alt);
+        Double alt = (end_altitiude - start_altitiude);
+        String p = gen_double_string(alt);
         tv_res_altitude.setText(p);
         RxToast.showToast("计算结果" + String.valueOf(end_altitiude - start_altitiude));
     }
@@ -70,10 +74,11 @@ public class AltitudeActivity extends ActivityBaseLocation implements AMapLocati
         tv_start_altitude.setText("");
 
     }
-    private void initBlueP(){
-        MyLocationStyle myLocationStyle=new MyLocationStyle();
-        aMap.setMyLocationStyle(myLocationStyle);//设置定位蓝点的Style
-        myLocationStyle = new MyLocationStyle();//初始化定位蓝点样式类
+
+    public void initBlueP() {
+        MyLocationStyle myLocationStyle = new MyLocationStyle();
+        myLocationStyle.strokeColor(Color.argb(0, 0, 0, 0));// 设置圆形的边框颜色
+        myLocationStyle.radiusFillColor(Color.argb(0, 0, 0, 0));// 设置圆形的填充颜色
         myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_FOLLOW);//连续定位、且将视角移动到地图中心点，定位点依照设备方向旋转，并且会跟随设备移动。（1秒1次定位）默认执行此种模式。
         myLocationStyle.interval(2000); //设置连续定位模式下的定位间隔，只在连续定位模式下生效，单次定位模式下不会生效。单位为毫秒。
         aMap.setMyLocationStyle(myLocationStyle);//设置定位蓝点的Style
@@ -81,15 +86,21 @@ public class AltitudeActivity extends ActivityBaseLocation implements AMapLocati
         aMap.setMyLocationEnabled(true);// 设置为true表示启动显示定位蓝点，false表示隐藏定位蓝点并不进行定位，默认是false。
 //        aMap.moveCamera(CameraUpdateFactory.changeLatLng(latlng));
         aMap.moveCamera(CameraUpdateFactory.zoomTo(18));
+
     }
 
 
+    @Event(R.id.btn_record_end_point)
+    private void end_a(View v) {
+        tv_end_altitude.setText(curr_altitude);
+        end_altitiude = Double.parseDouble(curr_altitude);
+
+    }
+
     @Event(R.id.btn_record_point)
-    private void start_a(View v) {
-        if (null != locationClient) {
-            //签到只需调用startLocation即可
-            locationClient.startLocation();
-        }
+    private void btn_record_point(View v) {
+        tv_start_altitude.setText(curr_altitude);
+        start_altitiude = Double.parseDouble(curr_altitude);
     }
 
     @Override
@@ -123,10 +134,12 @@ public class AltitudeActivity extends ActivityBaseLocation implements AMapLocati
         }
         locationClient = new AMapLocationClient(this);
         AMapLocationClientOption option = new AMapLocationClientOption();
-        option.setLocationPurpose(AMapLocationClientOption.AMapLocationPurpose.SignIn);
+        option.setLocationPurpose(AMapLocationClientOption.AMapLocationPurpose.Sport);
         locationClient.setLocationOption(option);
         //设置定位监听
         locationClient.setLocationListener(this);
+        locationClient.startLocation();
+
 
     }
 
@@ -135,17 +148,10 @@ public class AltitudeActivity extends ActivityBaseLocation implements AMapLocati
     public void onLocationChanged(AMapLocation aMapLocation) {
         if (aMapLocation.getErrorCode() == AMapLocation.LOCATION_SUCCESS) {
             System.out.println("签到成功，签到经纬度：(" + aMapLocation.getLatitude() + "," + aMapLocation.getLongitude() + ")");
-            DecimalFormat decimalFormat=new DecimalFormat(".00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
-            String altitude=decimalFormat.format(aMapLocation.getAltitude());//format 返回的是字符串
-            if (start_altitiude == 0) {
-                start_altitiude = aMapLocation.getAltitude();
-                tv_start_altitude.setText(String.valueOf(altitude));
+            DecimalFormat decimalFormat = new DecimalFormat(".00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
+            curr_altitude = decimalFormat.format(aMapLocation.getAltitude());//format 返回的是字符串
 
-            } else {
-                end_altitiude = aMapLocation.getAltitude();
-                tv_end_altitude.setText(String.valueOf(altitude));
 
-            }
         } else {
             //可以记录错误信息，或者根据错误错提示用户进行操作，Demo中只是打印日志
             Log.e("AMap", "签到定位失败，错误码：" + aMapLocation.getErrorCode() + ", " + aMapLocation.getLocationDetail());
