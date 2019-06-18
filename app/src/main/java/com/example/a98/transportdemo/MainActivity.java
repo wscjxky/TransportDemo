@@ -2,19 +2,16 @@ package com.example.a98.transportdemo;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.*;
-import android.widget.*;
-import android.content.Intent;
+import android.view.View;
+import android.widget.Button;
 
 import com.example.a98.transportdemo.record_point.PointActivity;
-import com.example.a98.transportdemo.record_road.AltitudeActivity;
 import com.example.a98.transportdemo.record_road.ChooseActivity;
-import com.example.a98.transportdemo.record_road.RadiusActivity;
-import com.example.a98.transportdemo.record_road.SatelliteActivity;
 import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
 import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
 import com.tencent.mm.opensdk.modelmsg.WXTextObject;
@@ -82,7 +79,6 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
         log(sHA1(this));
         disableAPIDialog();
-        init_permission();
 
         button1 = (Button) findViewById(R.id.button1);
         button1.setOnClickListener(new View.OnClickListener() {
@@ -112,22 +108,6 @@ public class MainActivity extends BaseActivity {
         });
     }
 
-    private void init_permission() {
-        RxPermissionsTool.
-                with(this).
-                addPermission(Manifest.permission.ACCESS_FINE_LOCATION).
-                addPermission(Manifest.permission.ACCESS_COARSE_LOCATION).
-                addPermission(Manifest.permission.READ_EXTERNAL_STORAGE).
-                addPermission(Manifest.permission.CAMERA).
-                addPermission(Manifest.permission.CALL_PHONE).
-                addPermission(Manifest.permission.INTERNET).
-                addPermission(Manifest.permission.RECORD_AUDIO).
-                addPermission(Manifest.permission.READ_PHONE_STATE).
-                addPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE).
-                addPermission(Manifest.permission.READ_PHONE_STATE).
-                initPermission();
-
-    }
 
     // 消除安卓P出现的弹窗问题
     private void disableAPIDialog() {

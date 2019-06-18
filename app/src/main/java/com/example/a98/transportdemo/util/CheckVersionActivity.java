@@ -1,5 +1,6 @@
 package com.example.a98.transportdemo.util;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
@@ -19,6 +20,7 @@ import com.lzy.okgo.model.Progress;
 import com.lzy.okgo.model.Response;
 import com.vondear.rxtool.RxDeviceTool;
 import com.vondear.rxtool.RxNetTool;
+import com.vondear.rxtool.RxPermissionsTool;
 import com.vondear.rxtool.view.RxToast;
 import com.vondear.rxui.view.RxProgressBar;
 import com.vondear.rxui.view.dialog.RxDialogLoading;
@@ -66,6 +68,23 @@ public class CheckVersionActivity extends BaseActivity {
         mContext = CheckVersionActivity.this;
         version = RxDeviceTool.getAppVersionName(mContext);
         loadData();
+        init_permission();
+
+    }
+    private void init_permission() {
+        RxPermissionsTool.
+                with(this).
+                addPermission(Manifest.permission.ACCESS_FINE_LOCATION).
+                addPermission(Manifest.permission.ACCESS_COARSE_LOCATION).
+                addPermission(Manifest.permission.READ_EXTERNAL_STORAGE).
+                addPermission(Manifest.permission.CAMERA).
+                addPermission(Manifest.permission.CALL_PHONE).
+                addPermission(Manifest.permission.INTERNET).
+                addPermission(Manifest.permission.RECORD_AUDIO).
+                addPermission(Manifest.permission.REQUEST_INSTALL_PACKAGES).
+                addPermission(Manifest.permission.RESTART_PACKAGES).
+                addPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE).
+                initPermission();
 
     }
 
@@ -131,7 +150,7 @@ public class CheckVersionActivity extends BaseActivity {
         final RxDialogSureCancel rxDialogSureCancel = new RxDialogSureCancel(mContext);
         rxDialogSureCancel.setTitle("发现更新");
         rxDialogSureCancel.setContent(text);
-
+        rxDialogSureCancel.setCancelable(false);
         rxDialogSureCancel.getSureView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -144,7 +163,6 @@ public class CheckVersionActivity extends BaseActivity {
             public void onClick(View v) {
                 show_toast("已经取消当前下载");
                 btn_enter_main.setText("取消更新,点击进入软件");
-                btn_enter_main.setClickable(true);
 
                 rxDialogSureCancel.cancel();
             }
@@ -175,7 +193,6 @@ public class CheckVersionActivity extends BaseActivity {
                         RxToast.success("下载成功");
                         mRoundFlikerbar.finishLoad();
                         btn_enter_main.setText("更新完成,点击进入程序");
-                        btn_enter_main.setClickable(true);
 
                         Intent intent = new Intent(Intent.ACTION_VIEW);
                         File apkFile = response.body();

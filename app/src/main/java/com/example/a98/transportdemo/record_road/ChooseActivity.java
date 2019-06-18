@@ -3,14 +3,13 @@ package com.example.a98.transportdemo.record_road;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.TextView;
 
 import com.example.a98.transportdemo.BaseActivity;
 import com.example.a98.transportdemo.R;
+import com.example.a98.transportdemo.util.CheckVersionActivity;
 
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
-import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
 @ContentView(R.layout.activity_choose)
@@ -40,6 +39,11 @@ public class ChooseActivity extends BaseActivity {
     @Event(R.id.btn_video)
     private void btn_video(View v) {
         Intent intent=new Intent(ChooseActivity.this,VideoActivity.class);
+        startActivity(intent);
+    }
+    @Event(R.id.btn_checkver)
+    private void btn_checkver(View v) {
+        Intent intent=new Intent(ChooseActivity.this, CheckVersionActivity.class);
         startActivity(intent);
     }
     @Override
