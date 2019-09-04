@@ -1,12 +1,7 @@
 package com.example.a98.transportdemo;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
-import android.os.Bundle;
-import android.os.PersistableBundle;
-import android.provider.MediaStore;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -14,17 +9,19 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.amap.api.location.AMapLocation;
-import com.amap.api.location.AMapLocationClient;
-import com.amap.api.location.AMapLocationListener;
 import com.amap.api.maps2d.AMap;
 import com.amap.api.maps2d.CameraUpdateFactory;
 import com.amap.api.maps2d.model.MyLocationStyle;
+import com.example.a98.transportdemo.show_data.ShowData;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.interfaces.OnSelectListener;
+import com.vondear.rxtool.RxSPTool;
 import com.vondear.rxtool.view.RxToast;
 
-import org.xutils.x;
+import java.lang.reflect.Type;
+import java.util.List;
 
 public abstract class BaseActivity extends AppCompatActivity {
     //添加 menu
@@ -43,6 +40,18 @@ public abstract class BaseActivity extends AppCompatActivity {
     public void log(Object str) {
         Log.e("debug_log", str.toString());
 
+    }
+    public void updateShowData(List<ShowData>  showdatas){
+        Gson gson=new Gson();
+        String jsonString = gson.toJson(showdatas);
+        RxSPTool.putJSONCache(mContext,"show_data",jsonString);
+        log("ok");
+    }
+    public List<ShowData>  getShowData(){
+        Gson gson=new Gson();
+        String js = RxSPTool.readJSONCache(mContext,"show_data");
+        Type type = new TypeToken<List<ShowData>>() {}.getType();
+        return gson.fromJson(js, type);
     }
    protected void initPop(final Context context, final View view, final String text) {
         new XPopup.Builder(context)

@@ -65,56 +65,55 @@
                 android:textSize="18sp" />
 
         </LinearLayout>
-    <!--<LinearLayout-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
 
-        <!--android:orientation="vertical">-->
-        <!--<Button-->
-            <!--android:id="@+id/button2"-->
-            <!--android:layout_width="80dp"-->
-            <!--android:layout_height="80dp"-->
-            <!--android:layout_marginEnd="30dp"-->
-            <!--android:layout_marginStart="30dp"-->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <!--android:background="@drawable/busi_403"-->
-            <!--android:textColor="@color/white"-->
-            <!--android:textSize="40sp"-->
-            <!--/>-->
-        <!--<TextView-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:gravity="center"-->
-            <!--android:text="视频勘测"-->
-            <!--android:textColor="@color/black"-->
-            <!--android:textSize="18sp" />-->
-    <!--</LinearLayout>-->
+            <Button
+                android:id="@+id/button3"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:background="@drawable/busi_401"
+                android:textColor="@color/white"
+                android:layout_marginEnd="30dp"
+                android:layout_marginStart="30dp"
+                android:textSize="40sp"
+                tools:layout_editor_absoluteX="173dp"
+                tools:layout_editor_absoluteY="225dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="定位勘测"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:orientation="vertical">
+            <Button
+                android:id="@+id/btn_show_data"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
 
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dp_45"
-        android:orientation="vertical">
-        <Button
-            android:id="@+id/button3"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:background="@drawable/busi_401"
-            android:textColor="@color/white"
-
-            android:textSize="40sp"
-            tools:layout_editor_absoluteX="173dp"
-            tools:layout_editor_absoluteY="225dp" />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="定位勘测"
-            android:textColor="@color/black"
-            android:textSize="18sp" />
-        定位勘测
-    </LinearLayout>
+                android:background="@drawable/busi_403"
+                android:textColor="@color/white"
+                android:textSize="40sp"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="数据展示"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+        </LinearLayout>
 
     </LinearLayout>
 

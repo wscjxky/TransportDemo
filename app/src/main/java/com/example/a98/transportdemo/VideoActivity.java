@@ -26,8 +26,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static android.media.MediaMetadataRetriever.OPTION_CLOSEST;
-import static android.media.MediaMetadataRetriever.OPTION_CLOSEST_SYNC;
-import static android.media.MediaMetadataRetriever.OPTION_PREVIOUS_SYNC;
 
 @ContentView(R.layout.activity_second)
 

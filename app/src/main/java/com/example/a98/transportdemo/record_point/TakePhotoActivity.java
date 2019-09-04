@@ -8,26 +8,23 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.example.a98.transportdemo.R;
 import com.tencent.mm.opensdk.utils.Log;
 import com.vondear.camera.RxCameraView;
 import com.vondear.camera.tool.RxCameraTool;
 import com.vondear.rxtool.RxBarTool;
+import com.vondear.rxtool.RxExifTool;
 import com.vondear.rxtool.RxLocationTool;
 import com.vondear.rxtool.RxTool;
 import com.vondear.rxtool.view.RxToast;
 import com.vondear.rxui.activity.ActivityBaseLocation;
 import com.vondear.rxui.view.dialog.RxDialogScaleView;
-
 import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-
 import static android.view.View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
 import static android.view.View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION;
 
@@ -43,38 +40,43 @@ public class TakePhotoActivity extends ActivityBaseLocation {
     TextView mTvState;
     @ViewInject(R.id.iv_pic)
     ImageView mIvPic;
-    private String bearing="东";
+    private String bearing = "北角";
     private File photo;
-    protected String outpout_file="" ;
+    protected String outpout_file = "";
+    protected Double lat = 116.21345;
+    protected Double lng = 39.1654;
 
     @Override
     public void setGpsInfo(Location location) {
+        bearing = tras_bearing(location.getBearing());
+        lng=location.getLongitude();
+        lat=location.getLatitude();
         mTvGps.setText(String.format("经度: %s  纬度: %s\n精度: %s  方位: %s",
-                RxLocationTool.gpsToDegree(location.getLongitude()), RxLocationTool.gpsToDegree(location.getLatitude()), location.getAccuracy(), location.getBearing()));
-        bearing=tras_bearing(location.getBearing());
-
+                RxLocationTool.gpsToDegree(lng),RxLocationTool.gpsToDegree(lat),location.getAccuracy(), bearing));
     }
-    protected String tras_bearing(float bearing){
-        if (bearing==0){
+
+    protected String tras_bearing(float bearing) {
+        if (bearing == 0.0) {
+            return "北角";
+        } else if (bearing > 0.0 && bearing < 90.0) {
+            return "东北角";
+        } else if (bearing == 90.0) {
+            return "东角";
+        } else if (bearing > 90.0 && bearing < 180.0) {
+            return "东角";
+        } else if (bearing == 180) {
+            return "东角";
+        } else if (bearing > 270.0 && bearing < 270.0) {
+            return "东角";
+        } else if (bearing == 270.0) {
+            return "东角";
+        } else if (bearing > 270.0 && bearing < 360.0) {
+            return "东角";
+        } else {
             return "北角";
         }
-        if (bearing>0 && bearing<90){
-            return "东北角";
-        }
-        if (bearing==90){
-            return "东角";
-        }
-//        if (bearing>0 && bearing<50){
-//            return "北角";
-//        }
-//        if (bearing>0 && bearing<50){
-//            return "北角";
-//        }
-//        if (bearing>0 && bearing<50){
-//            return "北角";
-//        }
-        return "";
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,7 +86,7 @@ public class TakePhotoActivity extends ActivityBaseLocation {
         x.view().inject(this);
         Intent intent = getIntent();
         // 获取Intent中的Bundle数据
-        outpout_file=intent.getStringExtra(MediaStore.EXTRA_OUTPUT);
+        outpout_file = intent.getStringExtra(MediaStore.EXTRA_OUTPUT);
         initCamera();
         statusBarHide();
     }
@@ -121,9 +123,11 @@ public class TakePhotoActivity extends ActivityBaseLocation {
 //        System.out.println(fileName);
 
 //        FileOutputStream os = new FileOutputStream(getExternalCacheDir()+fileName);
-        FileOutputStream os=new FileOutputStream(outpout_file);
+        FileOutputStream os = new FileOutputStream(outpout_file);
         os.write(data);
-        Log.e("",outpout_file);
+        Log.e("", outpout_file);
+        RxExifTool.writeLatLonIntoJpeg(outpout_file,lat,lng);
+
         os.close();
 //        photo = new File(getExternalCacheDir()+fileName);
 //        FileInputStream fs = new FileInputStream(photo);
@@ -131,7 +135,7 @@ public class TakePhotoActivity extends ActivityBaseLocation {
 //        mIvPic.setImageBitmap(bitmap);
         Intent intent = getIntent();
         intent.putExtra("bearing", bearing);
-        intent.putExtra("filename",outpout_file);
+        intent.putExtra("filename", outpout_file);
 
         setResult(RESULT_OK, intent);
         finish();
@@ -152,9 +156,8 @@ public class TakePhotoActivity extends ActivityBaseLocation {
 
     @Event(R.id.btn_take_camera)
     private void take_camera(View view) {
-        if (RxTool.isFastClick(1000)) {
+        if (RxTool.isFastClick(100)) {
             RxToast.normal("请不要重复点击拍照按钮");
-            return;
         } else {
             RxCameraTool.takePic(TakePhotoActivity.this, mCameraView);
         }
@@ -171,7 +174,7 @@ public class TakePhotoActivity extends ActivityBaseLocation {
         }
     }
 
-    private   void statusBarHide(){
+    private void statusBarHide() {
         View decorView = this.getWindow().getDecorView();
         decorView.setSystemUiVisibility(SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
         decorView.setSystemUiVisibility(SYSTEM_UI_FLAG_HIDE_NAVIGATION);

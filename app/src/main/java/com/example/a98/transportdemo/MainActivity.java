@@ -1,6 +1,5 @@
 package com.example.a98.transportdemo;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -12,17 +11,21 @@ import android.widget.Button;
 
 import com.example.a98.transportdemo.record_point.PointActivity;
 import com.example.a98.transportdemo.record_road.ChooseActivity;
+import com.example.a98.transportdemo.show_data.ShowData;
+import com.example.a98.transportdemo.show_data.ShowDataActivity;
+import com.google.gson.Gson;
 import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
 import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
 import com.tencent.mm.opensdk.modelmsg.WXTextObject;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
-import com.vondear.rxtool.RxPermissionsTool;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends BaseActivity {
@@ -89,14 +92,14 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-//        button2 = (Button) findViewById(R.id.button2);
-//        button2.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(MainActivity.this, VideoActivity.class);
-//                startActivity(intent);
-//            }
-//        });
+        button2 = (Button) findViewById(R.id.btn_show_data);
+        button2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, ShowDataActivity.class);
+                startActivity(intent);
+            }
+        });
 
         button3 = (Button) findViewById(R.id.button3);
         button3.setOnClickListener(new View.OnClickListener() {
@@ -106,6 +109,17 @@ public class MainActivity extends BaseActivity {
                 startActivity(intent);
             }
         });
+        Gson gson=new Gson();
+        List<ShowData> showdatas = new ArrayList<ShowData>();
+        ShowData sd=new ShowData();
+        sd.address="asdzxcasdasd";
+        showdatas.add(sd);
+        updateShowData(showdatas);
+        List<ShowData> datalist= getShowData();
+        for (ShowData item :datalist) {
+            log(item);
+        }
+
     }
 
 

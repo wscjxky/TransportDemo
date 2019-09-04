@@ -3,21 +3,16 @@ package com.example.a98.transportdemo.record_point;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.TextView;
 
 import com.example.a98.transportdemo.BaseActivity;
 import com.example.a98.transportdemo.MainActivity;
 import com.example.a98.transportdemo.R;
 
 import org.xutils.view.annotation.Event;
-import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
 
 public class FinishActivity extends BaseActivity {
-    @ViewInject(R.id.tv_pollArea)
-    private EditText tv_pollArea;
     @Event(R.id.btn_finish_finish)
     private void  finish_btn(View view){
 //        Intent intent = new Intent(Intent.ACTION_SEND);

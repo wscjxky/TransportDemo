@@ -7,10 +7,6 @@ import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
-import com.amap.api.maps2d.MapView;
-
-import org.xutils.view.annotation.ViewInject;
-import org.xutils.x;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

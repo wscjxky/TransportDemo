@@ -23,24 +23,16 @@ import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationClientOption.AMapLocationMode;
 import com.amap.api.location.AMapLocationListener;
-import  com.amap.api.maps.model.BitmapDescriptorFactory;
-import  com.amap.api.maps.model.LatLng;
-import  com.amap.api.maps.model.MarkerOptions;
-
 import com.amap.api.maps.model.LatLng;
-import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.PolygonOptions;
 import com.amap.api.maps.model.Polyline;
 import com.amap.api.maps.model.PolylineOptions;
-import com.amap.api.trace.LBSTraceClient;
-import com.amap.api.trace.TraceListener;
-import com.amap.api.trace.TraceLocation;
 import com.amap.api.trace.TraceOverlay;
 import com.example.a98.transportdemo.BaseActivity;
 import com.example.a98.transportdemo.R;
 import com.example.a98.transportdemo.data.DbAdapter;
 import com.example.a98.transportdemo.data.PathRecord;
-import com.example.a98.transportdemo.util.Util;
+
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
@@ -58,66 +50,50 @@ import static com.example.a98.transportdemo.util.Calculate.gen_area;
 
 @ContentView(R.layout.activity_third)
 public class AreaActivity extends BaseActivity implements com.amap.api.maps.LocationSource, AMapLocationListener
-        , TraceListener {
-    private final static int CALLTRACE = 0;
+         {
     private com.amap.api.maps.AMap mAMap;
     private OnLocationChangedListener mListener;
     private AMapLocationClient mLocationClient;
     private AMapLocationClientOption mLocationOption;
-    private PolylineOptions mPolyoptions, tracePolytion;
+    private PolylineOptions mPolyoptions;
     private Polyline mpolyline;
     private PathRecord record;
     private long mStartTime;
     private long mEndTime;
+    @ViewInject(R.id.locationbtn)
     private ToggleButton btn;
     private DbAdapter DbHepler;
-    private List<AMapLocation> recordList = new ArrayList<AMapLocation>();
-    private int tracesize = 30;
-    private int mDistance = 0;
-    private  LatLng currentLatLng;
-    private TextView mResultShow;
-    private Marker mlocMarker;
     @ViewInject(R.id.tv_level)
     private TextView tv_level;
     @ViewInject(R.id.map)
     private com.amap.api.maps.MapView mMapView;
     private LocationManager manager;
-    private List<TraceLocation> mTracelocationlist = new ArrayList<TraceLocation>();
-    private List<TraceOverlay> mOverlayList = new ArrayList<TraceOverlay>();
+
 
     private GpsStatus.Listener gpsStatusListener = new GpsStatus.Listener() {
         @SuppressLint("SetTextI18n")
         @Override
         public void onGpsStatusChanged(int event) {
-            switch (event) {
-                case GpsStatus.GPS_EVENT_SATELLITE_STATUS:
-                    if (ActivityCompat.checkSelfPermission(AreaActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    }
-                    GpsStatus gpsStatus = manager.getGpsStatus(null);
-                    int maxSatellites = gpsStatus.getMaxSatellites();
-                    Iterator<GpsSatellite> iters = gpsStatus.getSatellites().iterator();
-                    int count = 0;
-                    StringBuilder sb = new StringBuilder();
-                    while (iters.hasNext() && count <= maxSatellites) {
-                        count++;
-                        GpsSatellite s = iters.next();
-                        float snr = s.getSnr();
-                        sb.append("第").append(count).append("颗").append("：").append(snr).append("\n");
-                    }
-                    tv_level.setText("当前卫星颗数：" + count);
-                    break;
-                default:
-                    break;
+            if (event == GpsStatus.GPS_EVENT_SATELLITE_STATUS) {
+                ActivityCompat.checkSelfPermission(AreaActivity.this, Manifest.permission.ACCESS_FINE_LOCATION);
+                GpsStatus gpsStatus = manager.getGpsStatus(null);
+                int maxSatellites = gpsStatus.getMaxSatellites();
+                Iterator<GpsSatellite> iters = gpsStatus.getSatellites().iterator();
+                int count = 0;
+                StringBuilder sb = new StringBuilder();
+                while (iters.hasNext() && count <= maxSatellites) {
+                    count++;
+                    GpsSatellite s = iters.next();
+                    float snr = s.getSnr();
+                    sb.append("第").append(count).append("颗").append("：").append(snr).append("\n");
+                }
+                tv_level.setText("当前卫星颗数：" + count);
             }
         }
     };
 
     private TraceOverlay mTraceoverlay;
-    private  LatLng leftTopLatlng;
-    private  LatLng rightTopLatlng;
-    private  LatLng leftBottomLatlng;
 
-    private  LatLng rightBottomLatlng;
     private double area = 0.0;
 
     @Event(R.id.btn_finish)
@@ -178,13 +154,13 @@ public class AreaActivity extends BaseActivity implements com.amap.api.maps.Loca
 //            double left = 116.341749;
 //            double top = 39.950101;
 //            double bottom = 39.950076;
-            leftTopLatlng = new LatLng(top, left);
-            rightBottomLatlng = new LatLng(bottom, right);
-            leftBottomLatlng = new LatLng(bottom, left);
-            rightTopLatlng = new LatLng(top, right);
+            LatLng leftTopLatlng = new LatLng(top, left);
+            LatLng rightBottomLatlng = new LatLng(bottom, right);
+            LatLng leftBottomLatlng = new LatLng(bottom, left);
+            LatLng rightTopLatlng = new LatLng(top, right);
 
             ArrayList<LatLng> rect = new ArrayList<>();
-            rect.add(leftTopLatlng);rect.add(leftBottomLatlng);rect.add(rightTopLatlng);rect.add(rightBottomLatlng);
+            rect.add(leftTopLatlng);rect.add(leftBottomLatlng);rect.add(rightBottomLatlng);rect.add(rightTopLatlng);
             log(rect);
             mAMap.addPolygon(new PolygonOptions().addAll(rect)
                     .strokeColor(Color.RED)
@@ -202,9 +178,10 @@ public class AreaActivity extends BaseActivity implements com.amap.api.maps.Loca
         setContentView(R.layout.activity_third);
         x.view().inject(this);
         mMapView.onCreate(savedInstanceState);// 此方法必须重写
+        mContext=AreaActivity.this;
         init();
         initpolyline();
-
+        initPop(mContext,btn,"当卫星颗数较多,定位稳定时候,点击开始定位");
     }
 
     private void init() {
@@ -212,7 +189,6 @@ public class AreaActivity extends BaseActivity implements com.amap.api.maps.Loca
             mAMap = mMapView.getMap();
             setUpMap();
         }
-        btn = (ToggleButton) findViewById(R.id.locationbtn);
         btn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -221,29 +197,18 @@ public class AreaActivity extends BaseActivity implements com.amap.api.maps.Loca
                     if (record != null) {
                         record = null;
                     }
-
                     record = new PathRecord();
                     mStartTime = System.currentTimeMillis();
                     record.setDate(getcueDate(mStartTime));
-                    mResultShow.setText("总距离");
                 } else {
                     mEndTime = System.currentTimeMillis();
-//                    mOverlayList.add(mTraceoverlay);
-                    DecimalFormat decimalFormat = new DecimalFormat("0.0");
-                    mResultShow.setText(decimalFormat.format(getTotalDistance() / 1000d) + "KM");
-                    LBSTraceClient mTraceClient = new LBSTraceClient(getApplicationContext());
-                    mTraceClient.queryProcessedTrace(2, Util.parseTraceLocationList(record.getPathline()),
-                            LBSTraceClient.TYPE_AMAP, AreaActivity.this);
-                    set_rect();
-
                     saveRecord(record.getPathline(), record.getDate());
+                    set_rect();
 
                 }
             }
         });
-        mResultShow = (TextView) findViewById(R.id.show_all_dis);
 
-        mTraceoverlay = new TraceOverlay(mAMap);
         manager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
@@ -304,7 +269,7 @@ public class AreaActivity extends BaseActivity implements com.amap.api.maps.Loca
         if (list == null || list.size() == 0) {
             return "";
         }
-        StringBuffer pathline = new StringBuffer();
+        StringBuilder pathline = new StringBuilder();
         for (int i = 0; i < list.size(); i++) {
             AMapLocation location = list.get(i);
             String locString = amapLocationToString(location);
@@ -317,14 +282,12 @@ public class AreaActivity extends BaseActivity implements com.amap.api.maps.Loca
     }
 
     private String amapLocationToString(AMapLocation location) {
-        StringBuffer locString = new StringBuffer();
-        locString.append(location.getLatitude()).append(",");
-        locString.append(location.getLongitude()).append(",");
-        locString.append(location.getProvider()).append(",");
-        locString.append(location.getTime()).append(",");
-        locString.append(location.getSpeed()).append(",");
-        locString.append(location.getBearing());
-        return locString.toString();
+        return location.getLatitude() + "," +
+                location.getLongitude() + "," +
+                location.getProvider() + "," +
+                location.getTime() + "," +
+                location.getSpeed() + "," +
+                location.getBearing();
     }
 
     private void initpolyline() {
@@ -332,9 +295,7 @@ public class AreaActivity extends BaseActivity implements com.amap.api.maps.Loca
         mPolyoptions.width(8f);
         mPolyoptions.color(Color.GRAY);
 
-        tracePolytion = new  PolylineOptions();
-        tracePolytion.width(40);
-        tracePolytion.setCustomTexture( BitmapDescriptorFactory.fromResource(R.drawable.grasp_trace_line));
+
 
     }
 
@@ -359,7 +320,7 @@ public class AreaActivity extends BaseActivity implements com.amap.api.maps.Loca
     @Override
     public void onLocationChanged(AMapLocation amapLocation) {
         if (mListener != null && amapLocation != null) {
-            if (amapLocation != null && amapLocation.getErrorCode() == 0) {
+            if (amapLocation.getErrorCode() == 0) {
                 mListener.onLocationChanged(amapLocation);// 显示系统小蓝点
                  LatLng mylocation = new  LatLng(amapLocation.getLatitude(),
                         amapLocation.getLongitude());
@@ -367,13 +328,8 @@ public class AreaActivity extends BaseActivity implements com.amap.api.maps.Loca
                 if (btn.isChecked()) {
                     record.addpoint(amapLocation);
                     mPolyoptions.add(mylocation);
-//                    mTracelocationlist.add(Util.parseTraceLocation(amapLocation));
-                    mResultShow.setText(mylocation.toString());
                     redrawline();
-                    currentLatLng = mylocation;
-                    if (mTracelocationlist.size() > tracesize - 1) {
-                        trace();
-                    }
+
                 }
             } else {
                 String errText = "定位失败," + amapLocation.getErrorCode() + ": "
@@ -423,91 +379,10 @@ public class AreaActivity extends BaseActivity implements com.amap.api.maps.Loca
         SimpleDateFormat formatter = new SimpleDateFormat(
                 "yyyy-MM-dd  HH:mm:ss ");
         Date curDate = new Date(time);
-        String date = formatter.format(curDate);
-        return date;
+        return formatter.format(curDate);
     }
 
 
-    private void trace() {
-        List<TraceLocation> locationList = new ArrayList<>(mTracelocationlist);
-        LBSTraceClient mTraceClient = new LBSTraceClient(getApplicationContext());
-        mTraceClient.queryProcessedTrace(1, locationList, LBSTraceClient.TYPE_AMAP, this);
-        TraceLocation lastlocation = mTracelocationlist.get(mTracelocationlist.size() - 1);
-        mTracelocationlist.clear();
-//        mTracelocationlist.add(lastlocation);
-    }
-
-    /**
-     * 轨迹纠偏失败回调。
-     *
-     * @param i
-     * @param s
-     */
-    @Override
-    public void onRequestFailed(int i, String s) {
-        mOverlayList.add(mTraceoverlay);
-//        mTraceoverlay = new TraceOverlay(mAMap);
-    }
-
-    @Override
-    public void onTraceProcessing(int i, int i1, List< LatLng> list) {
-
-    }
-
-    /**
-     * 轨迹纠偏成功回调。
-     *
-     * @param lineID      纠偏的线路ID
-     * @param linepoints  纠偏结果
-     * @param distance    总距离
-     * @param waitingtime 等待时间
-     */
-    @Override
-    public void onFinished(int lineID, List< LatLng> linepoints, int distance, int waitingtime) {
-        if (lineID == 1) {
-            if (linepoints != null && linepoints.size() > 0) {
-                mTraceoverlay.add(linepoints);
-                mDistance += distance;
-                mTraceoverlay.setDistance(mTraceoverlay.getDistance() + distance);
-                if (mlocMarker == null) {
-                    mlocMarker = mAMap.addMarker(new MarkerOptions().position(linepoints.get(linepoints.size() - 1))
-                            .icon(BitmapDescriptorFactory
-                                    .fromResource(R.drawable.point))
-                            .title("距离：" + mDistance + "米"));
-                    mlocMarker.showInfoWindow();
-                } else {
-                    mlocMarker.setTitle("距离：" + mDistance + "米");
-                    mlocMarker.setPosition(linepoints.get(linepoints.size() - 1));
-                    mlocMarker.showInfoWindow();
-                }
-            }
-        } else if (lineID == 2) {
-            if (linepoints != null && linepoints.size() > 0) {
-//                mAMap.addPolyline(new PolylineOptions()
-//                        .color(Color.RED)
-//                        .width(40).addAll(linepoints));
-            }
-        }
-
-    }
-
-    /**
-     * 最后获取总距离
-     *
-     * @return
-     */
-    private int getTotalDistance() {
-        int distance = 0;
-        for (TraceOverlay to : mOverlayList) {
-            distance = distance + to.getDistance();
-        }
-        return distance;
-    }
-
-    public static void actionstart(Context context) {
-        Intent intent = new Intent(context, AreaActivity.class);
-        context.startActivity(intent);
-    }
 
 
     /**

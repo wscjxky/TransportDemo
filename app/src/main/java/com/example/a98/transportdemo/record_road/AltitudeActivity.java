@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
@@ -16,17 +15,12 @@ import com.amap.api.location.AMapLocationListener;
 import com.amap.api.maps2d.AMap;
 import com.amap.api.maps2d.CameraUpdateFactory;
 import com.amap.api.maps2d.MapView;
-import com.amap.api.maps2d.model.LatLng;
-import com.amap.api.maps2d.model.Marker;
 import com.amap.api.maps2d.model.MyLocationStyle;
-import com.example.a98.transportdemo.BaseActivity;
 import com.example.a98.transportdemo.R;
 import com.vondear.rxtool.RxLocationTool;
-import com.vondear.rxtool.RxTextTool;
 import com.vondear.rxtool.view.RxToast;
 import com.vondear.rxui.activity.ActivityBaseLocation;
 
-import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;

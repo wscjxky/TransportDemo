@@ -18,34 +18,40 @@ public class ChooseActivity extends BaseActivity {
 
     @Event(R.id.btn_satellite)
     private void btn_satellite(View v) {
-        Intent intent=new Intent(ChooseActivity.this,SatelliteActivity.class);
+        Intent intent = new Intent(ChooseActivity.this, SatelliteActivity.class);
         startActivity(intent);
     }
+
     @Event(R.id.btn_radius)
     private void btn_radius(View v) {
-        Intent intent=new Intent(ChooseActivity.this,RadiusActivity.class);
+        Intent intent = new Intent(ChooseActivity.this, RadiusActivity.class);
         startActivity(intent);
     }
+
     @Event(R.id.btn_altitude)
     private void btn_altitude(View v) {
-        Intent intent=new Intent(ChooseActivity.this,AltitudeActivity.class);
+        Intent intent = new Intent(ChooseActivity.this, AltitudeActivity.class);
         startActivity(intent);
     }
+
     @Event(R.id.btn_angle)
     private void btn_angle(View v) {
-        Intent intent=new Intent(ChooseActivity.this,AngleActivity.class);
+        Intent intent = new Intent(ChooseActivity.this, AngleActivity.class);
         startActivity(intent);
     }
+
     @Event(R.id.btn_video)
     private void btn_video(View v) {
-        Intent intent=new Intent(ChooseActivity.this,VideoActivity.class);
+        Intent intent = new Intent(ChooseActivity.this, VideoActivity.class);
         startActivity(intent);
     }
+
     @Event(R.id.btn_checkver)
     private void btn_checkver(View v) {
-        Intent intent=new Intent(ChooseActivity.this, CheckVersionActivity.class);
+        Intent intent = new Intent(ChooseActivity.this, CheckVersionActivity.class);
         startActivity(intent);
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +59,7 @@ public class ChooseActivity extends BaseActivity {
         x.view().inject(this);
 
     }
+
     @Event(R.id.btn_finish)
     private void finish_activity(View v) {
 

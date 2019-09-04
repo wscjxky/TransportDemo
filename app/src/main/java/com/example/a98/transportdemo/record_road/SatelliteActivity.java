@@ -72,7 +72,7 @@ public class SatelliteActivity extends BaseActivity implements AMapLocationListe
             public void onCaptureComplete(@NonNull Bitmap bitmap) {
                 Uri uri = RxPhotoTool.createImagePathUri(mContext);
                 String filename = RxPhotoTool.getRealFilePath(mContext, uri);
-                writePngFile(filename, bitmap);
+                writeJPEGFile(filename, bitmap);
                 CustomImageViewerPopup viewerPopup = new CustomImageViewerPopup(mContext);
 //自定义的ImageViewer弹窗需要自己手动设置相应的属性，必须设置的有srcView，url和imageLoader。
                 viewerPopup.setSingleSrcView(iv_statellite_screenshot, uri);
@@ -88,13 +88,13 @@ public class SatelliteActivity extends BaseActivity implements AMapLocationListe
 
     }
 
-    public void writePngFile(String filename, Bitmap bitmap) { // 将在屏幕上绘制的图形保存到SD卡
+    public void writeJPEGFile(String filename, Bitmap bitmap) { // 将在屏幕上绘制的图形保存到SD卡
         File outFile = new File(filename);
         log(outFile);
 
         try {
             FileOutputStream fos = new FileOutputStream(outFile); // 创建文件输出流（写文件）
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);// 将图片对象按PNG格式压缩（质量100%)，写入文件
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);// 将图片对象按PNG格式压缩（质量100%)，写入文件
             fos.flush(); // 刷新
             fos.close();// 关闭流
         } catch (Exception e) {

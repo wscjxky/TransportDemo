@@ -38,6 +38,8 @@
         <activity android:name=".record_point.TakePhotoActivity"
             android:theme="@style/AppTheme_NoBar"/>
         <activity android:name=".record_point.AreaActivity" />
+        <activity android:name=".show_data.ShowDataActivity"/>
+        <activity android:name=".show_data.DataDetailActivity"/>
 
         <activity android:name=".record_road.VideoActivity" />
         <activity android:name=".record_road.AngleActivity"  android:theme="@style/AppTheme_NoBar"/>

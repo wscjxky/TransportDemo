@@ -227,6 +227,8 @@ public class ImageSelectorActivity extends BaseActivity {
                     LocalMedia image=new LocalMedia(cameraPath);
                     images.add(image);
                     log(bearing);
+                    log(images);
+
                     bearings.add(bearing);
                     log(images.size());
                     imageAdapter.bindImages(images);
@@ -274,7 +276,6 @@ public class ImageSelectorActivity extends BaseActivity {
         log(imageView.toString());
         new XPopup.Builder(mContext)
                 .asImageViewer(imageView, previewImages.get(position).getPath(), new SatelliteActivity.ImageLoader())
-
                 .show();
     }
 
