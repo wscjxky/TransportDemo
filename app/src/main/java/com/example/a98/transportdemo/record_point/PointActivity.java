@@ -25,7 +25,6 @@ import com.iflytek.cloud.ui.RecognizerDialogListener;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.interfaces.OnSelectListener;
 import com.lxj.xpopup.interfaces.XPopupCallback;
-import com.vondear.rxtool.RxSPTool;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -43,16 +42,16 @@ import java.util.LinkedHashMap;
 public class PointActivity extends LocateActivity {
     //    @ViewInject(R.id.take_photo)
 //    private ImageView photo_view;
-    @ViewInject(R.id.Text1)
-    private EditText text1;
-    @ViewInject(R.id.Text2)
-    private EditText text2;
-    @ViewInject(R.id.Text3)
-    private EditText text3;
-    @ViewInject(R.id.Text4)
-    private EditText text4;
-    @ViewInject(R.id.Text5)
-    private EditText text5;
+    @ViewInject(R.id.name)
+    private EditText name;
+    @ViewInject(R.id.road_name)
+    private EditText road_name;
+    @ViewInject(R.id.pollute_name)
+    private EditText pollute_name;
+    @ViewInject(R.id.zhuanghao)
+    private EditText zhuanghao;
+    @ViewInject(R.id.pollute_type)
+    private EditText pollute_type;
     @ViewInject(R.id.speak)
     private ImageView speak;
     @ViewInject(R.id.speak1)
@@ -86,10 +85,17 @@ public class PointActivity extends LocateActivity {
 
     @Event(value = {R.id.button_submit})
     private void submit(View view) {
-        saveTable();
+        HashMap<String,String> showData=new HashMap<>();
+        showData.put("道路名",this.road_name.getText().toString());
+        showData.put("桩号",this.zhuanghao.getText().toString());
+        showData.put("污染物名称",this.pollute_name.getText().toString());
+        showData.put("污染物类型",this.pollute_type.getText().toString());
+        showData.put("污染物面积",this.tv_pollArea.getText().toString());
+        showData.put("名称",this.name.getText().toString());
+        setShowItem(showData);
         Intent intent = new Intent(this, ImageSelectorActivity.class);
         startActivity(intent);
-//        finish();
+        finish();
     }
 
     @Event(value = {R.id.btn_largeArea})
@@ -103,13 +109,6 @@ public class PointActivity extends LocateActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_first);
         x.view().inject(this); //绑定注解
-        table.add(text1);
-        table.add(text2);
-        table.add(text3);
-        table.add(text4);
-        table.add(text5);
-        table.add(tv_pollArea);
-        setTable();
         initPop();
 
     }
@@ -223,47 +222,33 @@ public class PointActivity extends LocateActivity {
 
     }
 
-    private void saveTable() {
-        int count = 0;
-        for (EditText et : table) {
-            RxSPTool.putString(this, "text" + count, et.getText().toString());
-            count += 1;
-        }
-    }
 
-    private void setTable() {
-        int count = 0;
-        for (EditText et : table) {
-            String text = RxSPTool.getString(this, "text" + count);
-            count += 1;
-            if (!text.isEmpty())
-                et.setText(text);
-        }
-    }
+
+
 
     @Event(value = {R.id.speak})
     private void setSpeak(View view) {
-        setRecoder(text1);
+        setRecoder(name);
     }
 
     @Event(value = {R.id.speak1})
     private void setSpeak1(View view) {
-        setRecoder(text2);
+        setRecoder(road_name);
     }
 
     @Event(value = {R.id.speak2})
     private void setSpeak2(View view) {
-        setRecoder(text3);
+        setRecoder(pollute_name);
     }
 
     @Event(value = {R.id.speak3})
     private void setSpeak3(View view) {
-        setRecoder(text4);
+        setRecoder(zhuanghao);
     }
 
     @Event(value = {R.id.speak4})
     private void setSpeak4(View view) {
-        setRecoder(text5);
+        setRecoder(pollute_type);
     }
 
     @Event(value = {R.id.iv_smallArea})
@@ -272,7 +257,6 @@ public class PointActivity extends LocateActivity {
     }
 
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent intent) {
-
         switch (requestCode) {
             case POINT_TAKE_PHOTO:
                 String bearing_str = "";

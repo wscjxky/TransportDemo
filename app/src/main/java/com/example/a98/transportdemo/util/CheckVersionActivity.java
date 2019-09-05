@@ -45,7 +45,7 @@ public class CheckVersionActivity extends BaseActivity {
     private RxProgressBar mRoundFlikerbar;
     @ViewInject(R.id.btn_enter_main)
     private Button btn_enter_main;
-    boolean update = false;
+    boolean getContent = false;
     private String check_url = ROOT_URL + "check.php";
     private String download_url = ROOT_URL + "download.php";
     private String version;

@@ -26,7 +26,7 @@
             android:textSize="20sp" />
 
         <EditText
-            android:id="@+id/Text1"
+            android:id="@+id/name"
             android:layout_width="270dp"
             android:layout_height="50dp"
             android:background="@null"
@@ -60,7 +60,7 @@
             android:textSize="20sp" />
 
         <EditText
-            android:id="@+id/Text2"
+            android:id="@+id/road_name"
             android:layout_width="270dp"
             android:layout_height="50dp"
             android:background="@null"
@@ -95,7 +95,7 @@
             android:textSize="19sp" />
 
         <EditText
-            android:id="@+id/Text4"
+            android:id="@+id/pollute_name"
             android:layout_width="220dp"
             android:layout_height="50dp"
             android:background="@null"
@@ -129,7 +129,7 @@
             android:textSize="20sp" />
 
         <EditText
-            android:id="@+id/Text3"
+            android:id="@+id/zhuanghao"
             android:layout_width="270dp"
             android:layout_height="50dp"
             android:background="@null"
@@ -163,7 +163,7 @@
             android:textSize="19sp" />
 
         <EditText
-            android:id="@+id/Text5"
+            android:id="@+id/pollute_type"
             android:layout_width="220dp"
             android:layout_height="50dp"
             android:background="@null"

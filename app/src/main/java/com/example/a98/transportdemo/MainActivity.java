@@ -11,9 +11,7 @@ import android.widget.Button;
 
 import com.example.a98.transportdemo.record_point.PointActivity;
 import com.example.a98.transportdemo.record_road.ChooseActivity;
-import com.example.a98.transportdemo.show_data.ShowData;
 import com.example.a98.transportdemo.show_data.ShowDataActivity;
-import com.google.gson.Gson;
 import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
 import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
 import com.tencent.mm.opensdk.modelmsg.WXTextObject;
@@ -24,8 +22,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends BaseActivity {
@@ -79,6 +75,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mContext = this;
         setContentView(R.layout.activity_main);
         log(sHA1(this));
         disableAPIDialog();
@@ -109,16 +106,13 @@ public class MainActivity extends BaseActivity {
                 startActivity(intent);
             }
         });
-        Gson gson=new Gson();
-        List<ShowData> showdatas = new ArrayList<ShowData>();
-        ShowData sd=new ShowData();
-        sd.address="asdzxcasdasd";
-        showdatas.add(sd);
-        updateShowData(showdatas);
-        List<ShowData> datalist= getShowData();
-        for (ShowData item :datalist) {
-            log(item);
-        }
+
+//        SharedPreferences sp = getSharedPreferences("show_data", MODE_PRIVATE);
+//
+//        if (sp != null) {
+//            sp.edit().clear().commit();
+//            Toast.makeText(this, "数据已清空", Toast.LENGTH_LONG).show();
+//        }
 
     }
 

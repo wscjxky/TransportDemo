@@ -7,9 +7,15 @@ import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.vondear.rxtool.RxSPTool;
 
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 public class LocateActivity  extends BaseActivity {
     public AMapLocationClient mLocationClient = null;
@@ -18,6 +24,7 @@ public class LocateActivity  extends BaseActivity {
 
     public AMapLocation amapLocation;
     public Float bearing = (float) 0;
+    private Gson gson=new Gson();
 
     public String getBearing() {
         return Float.toString(bearing);
@@ -26,6 +33,31 @@ public class LocateActivity  extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initLocate();
+    }
+    public HashMap<String, String> getShowItem() {
+        String js = RxSPTool.getContent(mContext, "show_item");
+        Type type = new TypeToken<HashMap>() {
+        }.getType();
+        return gson.fromJson(js, type);
+    }
+
+    public void setShowItem(HashMap<String, String> showdata) {
+        String jsonString = gson.toJson(showdata);
+        RxSPTool.putContent(mContext, "show_item", jsonString);
+    }
+
+    public void addShowData(HashMap<String, String> showdata) {
+        List<HashMap<String, String>> ori_show_data = getShowData();
+        ori_show_data.add(showdata);
+        String jsonString = gson.toJson(ori_show_data);
+        RxSPTool.putContent(mContext, "show_data", jsonString);
+    }
+
+    public List<HashMap<String, String>> getShowData() {
+        String js = RxSPTool.getContent(mContext, "show_data");
+        Type type = new TypeToken<List<HashMap<String, String>>>() {
+        }.getType();
+        return gson.fromJson(js, type);
     }
     public void initLocate(){
         mLocationListener = new AMapLocationListener(){
@@ -69,9 +101,7 @@ public class LocateActivity  extends BaseActivity {
         mLocationOption.setLocationPurpose(AMapLocationClientOption.AMapLocationPurpose.Sport);
         mLocationClient.setLocationOption(mLocationOption);
     }
-    /**
-     * 方法必须重写
-     */
+
 
 
 }

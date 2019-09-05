@@ -2,6 +2,7 @@ package com.example.a98.transportdemo;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -12,7 +13,6 @@ import android.widget.Toast;
 import com.amap.api.maps2d.AMap;
 import com.amap.api.maps2d.CameraUpdateFactory;
 import com.amap.api.maps2d.model.MyLocationStyle;
-import com.example.a98.transportdemo.show_data.ShowData;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.lxj.xpopup.XPopup;
@@ -21,6 +21,8 @@ import com.vondear.rxtool.RxSPTool;
 import com.vondear.rxtool.view.RxToast;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public abstract class BaseActivity extends AppCompatActivity {
@@ -31,29 +33,67 @@ public abstract class BaseActivity extends AppCompatActivity {
     public static final int POINT_TAKE_PHOTO = 21;
     public static final int REQUEST_SCREENSHOT = 41;
     protected Context mContext;
+    private Gson gson = new Gson();
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mContext = this;
+    }
+
     public void log(Object str) {
         Log.e("debug_log", str.toString());
 
     }
-    public void updateShowData(List<ShowData>  showdatas){
-        Gson gson=new Gson();
-        String jsonString = gson.toJson(showdatas);
-        RxSPTool.putJSONCache(mContext,"show_data",jsonString);
-        log("ok");
-    }
-    public List<ShowData>  getShowData(){
-        Gson gson=new Gson();
-        String js = RxSPTool.readJSONCache(mContext,"show_data");
-        Type type = new TypeToken<List<ShowData>>() {}.getType();
+
+    public HashMap<String, String> getShowItem() {
+        String js = RxSPTool.getContent(mContext, "show_item");
+
+        if (js == null || js.isEmpty())
+            return new HashMap<String, String>();
+        Type type = new TypeToken<HashMap>() {
+        }.getType();
         return gson.fromJson(js, type);
     }
-   protected void initPop(final Context context, final View view, final String text) {
+
+    public void setShowItem(HashMap<String, String> showdata) {
+        String jsonString = gson.toJson(showdata);
+        RxSPTool.putContent(mContext, "show_item", jsonString);
+    }
+
+    public void addShowData(HashMap<String, String> showdata) {
+        List<HashMap<String, String>> ori_show_data = getShowData();
+        ori_show_data.add(showdata);
+        String jsonString = gson.toJson(ori_show_data);
+        RxSPTool.putContent(mContext, "show_data", jsonString);
+    }
+
+    public void updateShowData(List<HashMap<String, String>> showdata) {
+//        List<HashMap<String, String>> ori_show_data = getShowData();
+//        System.out.println(ori_show_data);
+//        ori_show_data.remove(showdata);
+        String jsonString = gson.toJson(showdata);
+        RxSPTool.putContent(mContext, "show_data", jsonString);
+    }
+
+    public List<HashMap<String, String>> getShowData() {
+        String js = RxSPTool.getContent(mContext, "show_data");
+        if (js == null || js.isEmpty()) {
+            return new ArrayList<HashMap<String, String>>();
+        }
+        Type type = new TypeToken<List<HashMap<String, String>>>() {
+        }.getType();
+
+        return gson.fromJson(js, type);
+    }
+
+    protected void initPop(final Context context, final View view, final String text) {
         new XPopup.Builder(context)
                 .atView(view)
                 .asAttachList(new String[]{text}, new int[]{},
@@ -83,11 +123,13 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
         return true;
     }
-    protected void show_toast(String string){
+
+    protected void show_toast(String string) {
         RxToast.showToast(string);
     }
-    public void initBlueP(AMap aMap){
-        MyLocationStyle myLocationStyle=new MyLocationStyle();
+
+    public void initBlueP(AMap aMap) {
+        MyLocationStyle myLocationStyle = new MyLocationStyle();
         myLocationStyle.strokeColor(Color.argb(0, 0, 0, 0));// 设置圆形的边框颜色
         myLocationStyle.radiusFillColor(Color.argb(0, 0, 0, 0));// 设置圆形的填充颜色
         myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_FOLLOW);//连续定位、且将视角移动到地图中心点，定位点依照设备方向旋转，并且会跟随设备移动。（1秒1次定位）默认执行此种模式。

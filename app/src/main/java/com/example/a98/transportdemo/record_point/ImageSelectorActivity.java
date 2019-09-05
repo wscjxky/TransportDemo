@@ -69,9 +69,9 @@ public class ImageSelectorActivity extends BaseActivity {
     private TextView folderName;
     private FolderWindow folderWindow;
 
-    private String cameraPath;
-    private ArrayList<String> bearings=new ArrayList<>();
-
+    public String cameraPath;
+    public ArrayList<String> bearings=new ArrayList<>();
+    public String bearing="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -186,8 +186,6 @@ public class ImageSelectorActivity extends BaseActivity {
         doneText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                onSelectDone(imageAdapter.getSelectedImages());
-//                finish();
                 Intent intent=new Intent(ImageSelectorActivity.this,FinishActivity.class);
                 startActivity(intent);
                 finish();
@@ -216,7 +214,7 @@ public class ImageSelectorActivity extends BaseActivity {
             }
             // on take photo success
             if (requestCode == POINT_TAKE_PHOTO) {
-                String bearing = data.getStringExtra("bearing");
+                bearing = data.getStringExtra("bearing");
                 if (enableCrop) {
 //                    startCrop(cameraPath);
                 } else {
@@ -233,6 +231,7 @@ public class ImageSelectorActivity extends BaseActivity {
                     log(images.size());
                     imageAdapter.bindImages(images);
                     imageAdapter.notifyDataSetChanged();
+
                 }
             }
             //on preview select change
