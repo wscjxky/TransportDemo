@@ -68,13 +68,9 @@ public class ShowDataActivity extends BaseActivity {
 
             @Override
             public void onItemSwiped(RecyclerView.ViewHolder viewHolder, int  pos) {
-                log("删除");
-                log(pos);
                 try {
-                    if(datalist.size()==1){
-                        datalist.clear();
-                    }
                     updateShowData(datalist);
+                    mAdapter.notifyDataSetChanged();
                 }
                 catch (Exception e){
                     log(e.toString());

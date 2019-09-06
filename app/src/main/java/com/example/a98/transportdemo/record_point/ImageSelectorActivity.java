@@ -113,16 +113,19 @@ public class ImageSelectorActivity extends BaseActivity {
         toolbar.setTitle("图片");
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.mipmap.ic_back);
-
         doneText = (TextView) findViewById(R.id.done_text);
         doneText.setVisibility(selectMode == MODE_MULTIPLE ? View.VISIBLE : View.GONE);
-
         previewText = (TextView) findViewById(R.id.preview_text);
         previewText.setVisibility(enablePreview ? View.VISIBLE : View.GONE);
-
         folderLayout = (LinearLayout) findViewById(R.id.folder_layout);
         folderName = (TextView) findViewById(R.id.folder_name);
+        doneText.setText("完成");
+        folderName.setText("全部图片");
+        previewText.setText("预览");
 
+        previewText.setText("预览");
+
+        previewText.setText("预览");
         recyclerView = (RecyclerView) findViewById(R.id.folder_list);
         recyclerView.setHasFixedSize(true);
         recyclerView.addItemDecoration(new GridSpacingItemDecoration(spanCount, ScreenUtils.dip2px(this, 2), false));
@@ -160,6 +163,7 @@ public class ImageSelectorActivity extends BaseActivity {
                 if (enable) {
                     doneText.setText(getString(R.string.done_num, selectImages.size(), maxSelectNum));
                     previewText.setText(getString(R.string.preview_num, selectImages.size()));
+
                 } else {
                     doneText.setText("完成");
                     previewText.setText("预览");

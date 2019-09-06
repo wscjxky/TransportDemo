@@ -2,12 +2,13 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:background="@color/oldlace"
+
     android:scrollbars="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#F0F0F0"
         android:orientation="vertical">
 
 
@@ -19,14 +20,14 @@
             <LinearLayout
                 android:id="@+id/ll_anchor_left"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/dp_300"
                 android:orientation="vertical"
-                android:padding="8dp">
+                >
 
                 <ImageView
                     android:id="@+id/iv_data_photo"
-                    android:layout_width="350dp"
-                    android:layout_height="300dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:src="@drawable/logo" />
             </LinearLayout>
